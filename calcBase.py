@@ -11,13 +11,12 @@ precedence = (
     ('left', 'AND'),
     ('nonassoc', 'IS_SUPP', 'IS_SUPP_0R_EQUALS', 'IS_INF', 'IS_INF_OR_EQUALS', 'IS_EQUALS'),
     ('left', 'PLUS', 'MINUS'),
-    ('left', 'TIMES', 'DIVIDE')
+    ('left', 'TIMES', 'DIVIDE'),
     )
 
 reserved = {
-    'fonction' : 'FUNCTION',
+    'func' : 'FUNCTION',
     'print' : 'PRINT',
-    'printString' : 'PRINT_STR',
     'empty' : 'EMPTY',
     'while' : 'WHILE',
     'for' : 'FOR',
@@ -25,22 +24,23 @@ reserved = {
     'else' : 'ELSE',
     'void' : 'VOID',
     'null' : 'NULL',
-    'return' : 'RETURN'
+    'return' : 'RETURN',
 }
 
 names = dict()
 functions = dict()
 
 tokens = [
-    'NUMBER', 'NAME', 'STRING',
+    'NUMBER', 'NAME',
     'MINUS', 'PLUS', 'TIMES', 'DIVIDE', 'EQUALS',
     'PLUS_PLUS', 'MINUS_MINUS',
     'LPAREN', 'RPAREN', 'LACO', 'RACO', 'QUOT', 'COMMA',
     'AND', 'OR', 'TRUE', 'FALSE',
-    'SEMICOLON',
+    'SEMICOLON', 'SPACE',
     'INCR', 'DECR',
     'MINUS_EQUALS', 'PLUS_EQUALS', 'TIMES_EQUALS', 'DIVIDE_EQUALS',
     'IS_SUPP', 'IS_SUPP_0R_EQUALS', 'IS_INF', 'IS_INF_OR_EQUALS', 'IS_EQUALS',
+    'LCOMMENT', 'RCOMMENT',
 
 ] + list(reserved.values())
 
@@ -72,6 +72,9 @@ t_IS_SUPP_0R_EQUALS = r'>='
 t_IS_INF = r'<'
 t_IS_INF_OR_EQUALS = r'<='
 t_IS_EQUALS = r'=='
+t_LCOMMENT = r'\/\*'
+t_RCOMMENT = r'\*\/'
+t_SPACE = r'\s'
 
 def t_NUMBER(t):
     r'\d+'
@@ -83,10 +86,7 @@ def t_NAME(t):
     t.type = reserved.get(t.value, 'NAME')
     return t
 
-def t_STRING(t):
-    r'[a-zA-Z_][a-zA-Z_0-9]*'
-    t.type = reserved.get(t.value, 'STRING')
-    return t
+
 
 # Ignored characters
 t_ignore = " \t"
@@ -95,7 +95,6 @@ t_ignore = " \t"
 def t_newline(t):
     r'\n+'
     t.lexer.lineno += t.value.count("\n")
-
 
 def t_error(t):
     print("Illegal character '%s'" % t.value[0])
@@ -112,28 +111,41 @@ def p_start(p):
     p[0] = ('START', p[1])
     print('Arbre de dérivation = ', p[0])
     printTreeGraph(p[0])
-    evalInst(p[1])
+    try:
+        evalInst(p[1])
+    except KeyError as ke:
+        print("Variable non initialisée :")
+        print(ke)
 
 def p_bloc(p):
     '''bloc : bloc statement SEMICOLON
-            | statement SEMICOLON'''
-    if len(p) == 4:
+            | statement SEMICOLON
+            | bloc LCOMMENT comment RCOMMENT
+            | LCOMMENT comment RCOMMENT'''
+    if len(p) == 4 and p[3] == ';':
         p[0] = ('bloc', p[1], p[2])
-    else:
+    elif len(p) == 3:
+        p[0] = ('bloc', p[1], 'empty')
+    elif p[1] == '/*' and p[3] == '*/':
+        p[0] = 'empty'
+    elif p[2] == '/*' and p[4] == '*/':
         p[0] = ('bloc', p[1], 'empty')
 
 def p_statement_print(p):
-    '''statement : PRINT LPAREN expression RPAREN'''
-    p[0] = ('print',p[3])
+    '''statement    : PRINT LPAREN expression RPAREN
+                    | PRINT LPAREN QUOT expression QUOT RPAREN'''
+    if len(p) == 5:
+        p[0] = ('print', p[3])
+    elif len(p) == 7:
+        p[0] = ('print_str', p[4])
 
-def p_statement_printString(p):
-    '''statement : PRINT_STR LPAREN QUOT STRING QUOT RPAREN'''
-    p[0] = ('print',p[4])
+def p_statement_comment(p):
+    '''comment  : NAME
+                | NAME SPACE comment'''
 
 def p_statement_assign(p):
     'statement : NAME EQUALS expression'
     p[0] = ('assign', p[1], p[3])
-
 
 def p_statement_increment_var(p):
     '''statement : NAME INCR
@@ -146,7 +158,6 @@ def p_statement_modif_var(p):
                 | NAME TIMES_EQUALS expression
                 | NAME DIVIDE_EQUALS expression'''
     p[0] = (p[2], p[1], p[3])
-
 
 def p_expression_opperation(p):
     '''expression : expression MINUS expression
@@ -207,18 +218,20 @@ def p_args(p):
         p[0] = ('param', p[3], p[1])
 
 def p_statement_declare_func(p):
-    '''statement : FUNCTION NAME LPAREN RPAREN LACO bloc RACO
-                | FUNCTION NAME LPAREN args RPAREN LACO bloc RACO'''
+    '''statement    : FUNCTION NAME LPAREN RPAREN LACO bloc RACO
+                    | FUNCTION NAME LPAREN args RPAREN LACO bloc RACO'''
     if len(p) == 8:
-        p[0] = ('function', (p[2], ('param', 'empty'), p[6]))
-    else:
-        p[0] = ('function', (p[2], p[4], p[7]))
+        p[0] = ('func', (p[2], ('param', 'empty'), p[6]))
+        functions[p[2]] = p[6]
+    elif len(p) == 9:
+        p[0] = ('func', (p[2], p[4], p[7]))
 
-
+def p_statement_call_func(p):
+    '''statement    : NAME LPAREN RPAREN
+                    | NAME LPAREN args RPAREN'''
 
 def p_error(p):
     print("Syntax error at '%s'" % p.value)
-
 
 import ply.yacc as yacc
 
@@ -226,10 +239,11 @@ yacc.yacc()
 
 
 def evalExpr(t):
-    #print('evalExpr')
-
-    if type(t) is int : return t
-    if type(t) is str : return names[t]
+    #print("evalExpr", t)
+    if type(t) is int: return t
+    if type(t) is str: return names[t]
+    if t[0] == 'call':
+        return evalExpr(t[3])
     if t[0] == '+':
         return evalExpr(t[1]) + evalExpr(t[2])
     if t[0] == '-':
@@ -257,18 +271,21 @@ def evalExpr(t):
         return evalExpr(t[1]) or evalExpr(t[2])
 
 
-
     return 'UNK'
 
 def evalInst(t):
-    #print('evalInst')
+    #print("evalInst",t)
     if t == 'empty':
         return
     if t[0] == 'print':
         print(evalExpr(t[1]))
+    if t[0] == 'print_str':
+        print(t[1])
     if t[0] == 'bloc':
         evalInst(t[1])
         evalInst(t[2])
+        #pile.push(p[1])
+        #pile.push(p[2])
 
     if t[0] == 'if':
         if evalExpr(t[1]):
@@ -283,6 +300,9 @@ def evalInst(t):
         while evalExpr(t[2]):
             evalInst(t[4])
             evalInst(t[3])
+
+    if t[0] == 'func':
+        functions[t[1]] = t[2]
 
     if t[0] == 'assign':
         names[t[1]] = evalExpr(t[2])
@@ -301,13 +321,7 @@ def evalInst(t):
 
     return t
 
-s = 'print(7+3*4/(10-8)*3);' \
-    'test=5;' \
-    'while(test>0){' \
-    '   test-=2;' \
-    '   print(test);' \
-    '};' \
-    'for(i=0;i<10;i++){' \
-    '   print(i);' \
-    '};'
+s = 'func test(testVar) { print("salut");};' \
+    'func test2() { print("sansParam"); };'
+
 yacc.parse(s)
