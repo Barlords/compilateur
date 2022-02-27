@@ -52,6 +52,8 @@ Rule 37    args -> expression
 Rule 38    args -> expression COMMA args
 Rule 39    statement -> FUNCTION NAME LPAREN RPAREN LACO bloc RACO
 Rule 40    statement -> FUNCTION NAME LPAREN args RPAREN LACO bloc RACO
+Rule 41    statement -> NAME LPAREN RPAREN
+Rule 42    statement -> NAME LPAREN args RPAREN
 
 Terminals, with rules where they appear
 
@@ -75,11 +77,11 @@ IS_SUPP              : 26
 IS_SUPP_0R_EQUALS    : 27
 LACO                 : 33 34 34 35 36 39 40
 LCOMMENT             : 4 5
-LPAREN               : 6 7 21 33 34 35 36 39 40
+LPAREN               : 6 7 21 33 34 35 36 39 40 41 42
 MINUS                : 17
 MINUS_EQUALS         : 14
 MINUS_MINUS          : 
-NAME                 : 8 9 10 11 12 13 14 15 16 23 39 40
+NAME                 : 8 9 10 11 12 13 14 15 16 23 39 40 41 42
 NULL                 : 
 NUMBER               : 22
 OR                   : 32
@@ -91,7 +93,7 @@ QUOT                 : 7 7
 RACO                 : 33 34 34 35 36 39 40
 RCOMMENT             : 4 5
 RETURN               : 
-RPAREN               : 6 7 21 33 34 35 36 39 40
+RPAREN               : 6 7 21 33 34 35 36 39 40 41 42
 SEMICOLON            : 2 3 36 36
 SPACE                : 9
 TIMES                : 19
@@ -104,7 +106,7 @@ error                :
 Nonterminals, with rules where they appear
 
 START                : 0
-args                 : 38 40
+args                 : 38 40 42
 bloc                 : 1 2 4 33 34 34 35 36 39 40
 comment              : 4 5 9
 expression           : 6 7 10 13 14 15 16 17 17 18 18 19 19 20 20 21 26 26 27 27 28 28 29 29 30 30 31 31 32 32 33 34 35 36 37 38
@@ -135,6 +137,8 @@ state 0
     (36) statement -> . FOR LPAREN statement SEMICOLON expression SEMICOLON statement RPAREN LACO bloc RACO
     (39) statement -> . FUNCTION NAME LPAREN RPAREN LACO bloc RACO
     (40) statement -> . FUNCTION NAME LPAREN args RPAREN LACO bloc RACO
+    (41) statement -> . NAME LPAREN RPAREN
+    (42) statement -> . NAME LPAREN args RPAREN
 
     LCOMMENT        shift and go to state 4
     PRINT           shift and go to state 5
@@ -174,6 +178,8 @@ state 2
     (36) statement -> . FOR LPAREN statement SEMICOLON expression SEMICOLON statement RPAREN LACO bloc RACO
     (39) statement -> . FUNCTION NAME LPAREN RPAREN LACO bloc RACO
     (40) statement -> . FUNCTION NAME LPAREN args RPAREN LACO bloc RACO
+    (41) statement -> . NAME LPAREN RPAREN
+    (42) statement -> . NAME LPAREN args RPAREN
 
     $end            reduce using rule 1 (START -> bloc .)
     LCOMMENT        shift and go to state 12
@@ -220,6 +226,8 @@ state 6
     (14) statement -> NAME . MINUS_EQUALS expression
     (15) statement -> NAME . TIMES_EQUALS expression
     (16) statement -> NAME . DIVIDE_EQUALS expression
+    (41) statement -> NAME . LPAREN RPAREN
+    (42) statement -> NAME . LPAREN args RPAREN
 
     EQUALS          shift and go to state 17
     INCR            shift and go to state 18
@@ -228,6 +236,7 @@ state 6
     MINUS_EQUALS    shift and go to state 21
     TIMES_EQUALS    shift and go to state 22
     DIVIDE_EQUALS   shift and go to state 23
+    LPAREN          shift and go to state 24
 
 
 state 7
@@ -235,21 +244,21 @@ state 7
     (33) statement -> IF . LPAREN expression RPAREN LACO bloc RACO
     (34) statement -> IF . LPAREN expression RPAREN LACO bloc RACO ELSE LACO bloc RACO
 
-    LPAREN          shift and go to state 24
+    LPAREN          shift and go to state 25
 
 
 state 8
 
     (35) statement -> WHILE . LPAREN expression RPAREN LACO bloc RACO
 
-    LPAREN          shift and go to state 25
+    LPAREN          shift and go to state 26
 
 
 state 9
 
     (36) statement -> FOR . LPAREN statement SEMICOLON expression SEMICOLON statement RPAREN LACO bloc RACO
 
-    LPAREN          shift and go to state 26
+    LPAREN          shift and go to state 27
 
 
 state 10
@@ -257,14 +266,14 @@ state 10
     (39) statement -> FUNCTION . NAME LPAREN RPAREN LACO bloc RACO
     (40) statement -> FUNCTION . NAME LPAREN args RPAREN LACO bloc RACO
 
-    NAME            shift and go to state 27
+    NAME            shift and go to state 28
 
 
 state 11
 
     (2) bloc -> bloc statement . SEMICOLON
 
-    SEMICOLON       shift and go to state 28
+    SEMICOLON       shift and go to state 29
 
 
 state 12
@@ -275,7 +284,7 @@ state 12
 
     NAME            shift and go to state 15
 
-    comment                        shift and go to state 29
+    comment                        shift and go to state 30
 
 state 13
 
@@ -296,7 +305,7 @@ state 14
 
     (5) bloc -> LCOMMENT comment . RCOMMENT
 
-    RCOMMENT        shift and go to state 30
+    RCOMMENT        shift and go to state 31
 
 
 state 15
@@ -305,7 +314,7 @@ state 15
     (9) comment -> NAME . SPACE comment
 
     RCOMMENT        reduce using rule 8 (comment -> NAME .)
-    SPACE           shift and go to state 31
+    SPACE           shift and go to state 32
 
 
 state 16
@@ -329,14 +338,14 @@ state 16
     (31) expression -> . expression AND expression
     (32) expression -> . expression OR expression
 
-    QUOT            shift and go to state 34
-    LPAREN          shift and go to state 32
-    NUMBER          shift and go to state 35
-    NAME            shift and go to state 36
-    TRUE            shift and go to state 37
-    FALSE           shift and go to state 38
+    QUOT            shift and go to state 35
+    LPAREN          shift and go to state 33
+    NUMBER          shift and go to state 36
+    NAME            shift and go to state 37
+    TRUE            shift and go to state 38
+    FALSE           shift and go to state 39
 
-    expression                     shift and go to state 33
+    expression                     shift and go to state 34
 
 state 17
 
@@ -358,13 +367,13 @@ state 17
     (31) expression -> . expression AND expression
     (32) expression -> . expression OR expression
 
-    LPAREN          shift and go to state 32
-    NUMBER          shift and go to state 35
-    NAME            shift and go to state 36
-    TRUE            shift and go to state 37
-    FALSE           shift and go to state 38
+    LPAREN          shift and go to state 33
+    NUMBER          shift and go to state 36
+    NAME            shift and go to state 37
+    TRUE            shift and go to state 38
+    FALSE           shift and go to state 39
 
-    expression                     shift and go to state 39
+    expression                     shift and go to state 40
 
 state 18
 
@@ -402,13 +411,13 @@ state 20
     (31) expression -> . expression AND expression
     (32) expression -> . expression OR expression
 
-    LPAREN          shift and go to state 32
-    NUMBER          shift and go to state 35
-    NAME            shift and go to state 36
-    TRUE            shift and go to state 37
-    FALSE           shift and go to state 38
+    LPAREN          shift and go to state 33
+    NUMBER          shift and go to state 36
+    NAME            shift and go to state 37
+    TRUE            shift and go to state 38
+    FALSE           shift and go to state 39
 
-    expression                     shift and go to state 40
+    expression                     shift and go to state 41
 
 state 21
 
@@ -430,13 +439,13 @@ state 21
     (31) expression -> . expression AND expression
     (32) expression -> . expression OR expression
 
-    LPAREN          shift and go to state 32
-    NUMBER          shift and go to state 35
-    NAME            shift and go to state 36
-    TRUE            shift and go to state 37
-    FALSE           shift and go to state 38
+    LPAREN          shift and go to state 33
+    NUMBER          shift and go to state 36
+    NAME            shift and go to state 37
+    TRUE            shift and go to state 38
+    FALSE           shift and go to state 39
 
-    expression                     shift and go to state 41
+    expression                     shift and go to state 42
 
 state 22
 
@@ -458,13 +467,13 @@ state 22
     (31) expression -> . expression AND expression
     (32) expression -> . expression OR expression
 
-    LPAREN          shift and go to state 32
-    NUMBER          shift and go to state 35
-    NAME            shift and go to state 36
-    TRUE            shift and go to state 37
-    FALSE           shift and go to state 38
+    LPAREN          shift and go to state 33
+    NUMBER          shift and go to state 36
+    NAME            shift and go to state 37
+    TRUE            shift and go to state 38
+    FALSE           shift and go to state 39
 
-    expression                     shift and go to state 42
+    expression                     shift and go to state 43
 
 state 23
 
@@ -486,15 +495,48 @@ state 23
     (31) expression -> . expression AND expression
     (32) expression -> . expression OR expression
 
-    LPAREN          shift and go to state 32
-    NUMBER          shift and go to state 35
-    NAME            shift and go to state 36
-    TRUE            shift and go to state 37
-    FALSE           shift and go to state 38
+    LPAREN          shift and go to state 33
+    NUMBER          shift and go to state 36
+    NAME            shift and go to state 37
+    TRUE            shift and go to state 38
+    FALSE           shift and go to state 39
 
-    expression                     shift and go to state 43
+    expression                     shift and go to state 44
 
 state 24
+
+    (41) statement -> NAME LPAREN . RPAREN
+    (42) statement -> NAME LPAREN . args RPAREN
+    (37) args -> . expression
+    (38) args -> . expression COMMA args
+    (17) expression -> . expression MINUS expression
+    (18) expression -> . expression PLUS expression
+    (19) expression -> . expression TIMES expression
+    (20) expression -> . expression DIVIDE expression
+    (21) expression -> . LPAREN expression RPAREN
+    (22) expression -> . NUMBER
+    (23) expression -> . NAME
+    (24) expression -> . TRUE
+    (25) expression -> . FALSE
+    (26) expression -> . expression IS_SUPP expression
+    (27) expression -> . expression IS_SUPP_0R_EQUALS expression
+    (28) expression -> . expression IS_INF expression
+    (29) expression -> . expression IS_INF_OR_EQUALS expression
+    (30) expression -> . expression IS_EQUALS expression
+    (31) expression -> . expression AND expression
+    (32) expression -> . expression OR expression
+
+    RPAREN          shift and go to state 45
+    LPAREN          shift and go to state 33
+    NUMBER          shift and go to state 36
+    NAME            shift and go to state 37
+    TRUE            shift and go to state 38
+    FALSE           shift and go to state 39
+
+    args                           shift and go to state 46
+    expression                     shift and go to state 47
+
+state 25
 
     (33) statement -> IF LPAREN . expression RPAREN LACO bloc RACO
     (34) statement -> IF LPAREN . expression RPAREN LACO bloc RACO ELSE LACO bloc RACO
@@ -515,15 +557,15 @@ state 24
     (31) expression -> . expression AND expression
     (32) expression -> . expression OR expression
 
-    LPAREN          shift and go to state 32
-    NUMBER          shift and go to state 35
-    NAME            shift and go to state 36
-    TRUE            shift and go to state 37
-    FALSE           shift and go to state 38
+    LPAREN          shift and go to state 33
+    NUMBER          shift and go to state 36
+    NAME            shift and go to state 37
+    TRUE            shift and go to state 38
+    FALSE           shift and go to state 39
 
-    expression                     shift and go to state 44
+    expression                     shift and go to state 48
 
-state 25
+state 26
 
     (35) statement -> WHILE LPAREN . expression RPAREN LACO bloc RACO
     (17) expression -> . expression MINUS expression
@@ -543,15 +585,15 @@ state 25
     (31) expression -> . expression AND expression
     (32) expression -> . expression OR expression
 
-    LPAREN          shift and go to state 32
-    NUMBER          shift and go to state 35
-    NAME            shift and go to state 36
-    TRUE            shift and go to state 37
-    FALSE           shift and go to state 38
+    LPAREN          shift and go to state 33
+    NUMBER          shift and go to state 36
+    NAME            shift and go to state 37
+    TRUE            shift and go to state 38
+    FALSE           shift and go to state 39
 
-    expression                     shift and go to state 45
+    expression                     shift and go to state 49
 
-state 26
+state 27
 
     (36) statement -> FOR LPAREN . statement SEMICOLON expression SEMICOLON statement RPAREN LACO bloc RACO
     (6) statement -> . PRINT LPAREN expression RPAREN
@@ -569,6 +611,8 @@ state 26
     (36) statement -> . FOR LPAREN statement SEMICOLON expression SEMICOLON statement RPAREN LACO bloc RACO
     (39) statement -> . FUNCTION NAME LPAREN RPAREN LACO bloc RACO
     (40) statement -> . FUNCTION NAME LPAREN args RPAREN LACO bloc RACO
+    (41) statement -> . NAME LPAREN RPAREN
+    (42) statement -> . NAME LPAREN args RPAREN
 
     PRINT           shift and go to state 5
     NAME            shift and go to state 6
@@ -577,17 +621,17 @@ state 26
     FOR             shift and go to state 9
     FUNCTION        shift and go to state 10
 
-    statement                      shift and go to state 46
+    statement                      shift and go to state 50
 
-state 27
+state 28
 
     (39) statement -> FUNCTION NAME . LPAREN RPAREN LACO bloc RACO
     (40) statement -> FUNCTION NAME . LPAREN args RPAREN LACO bloc RACO
 
-    LPAREN          shift and go to state 47
+    LPAREN          shift and go to state 51
 
 
-state 28
+state 29
 
     (2) bloc -> bloc statement SEMICOLON .
 
@@ -602,14 +646,14 @@ state 28
     RACO            reduce using rule 2 (bloc -> bloc statement SEMICOLON .)
 
 
-state 29
+state 30
 
     (4) bloc -> bloc LCOMMENT comment . RCOMMENT
 
-    RCOMMENT        shift and go to state 48
+    RCOMMENT        shift and go to state 52
 
 
-state 30
+state 31
 
     (5) bloc -> LCOMMENT comment RCOMMENT .
 
@@ -624,7 +668,7 @@ state 30
     RACO            reduce using rule 5 (bloc -> LCOMMENT comment RCOMMENT .)
 
 
-state 31
+state 32
 
     (9) comment -> NAME SPACE . comment
     (8) comment -> . NAME
@@ -632,9 +676,9 @@ state 31
 
     NAME            shift and go to state 15
 
-    comment                        shift and go to state 49
+    comment                        shift and go to state 53
 
-state 32
+state 33
 
     (21) expression -> LPAREN . expression RPAREN
     (17) expression -> . expression MINUS expression
@@ -654,15 +698,15 @@ state 32
     (31) expression -> . expression AND expression
     (32) expression -> . expression OR expression
 
-    LPAREN          shift and go to state 32
-    NUMBER          shift and go to state 35
-    NAME            shift and go to state 36
-    TRUE            shift and go to state 37
-    FALSE           shift and go to state 38
+    LPAREN          shift and go to state 33
+    NUMBER          shift and go to state 36
+    NAME            shift and go to state 37
+    TRUE            shift and go to state 38
+    FALSE           shift and go to state 39
 
-    expression                     shift and go to state 50
+    expression                     shift and go to state 54
 
-state 33
+state 34
 
     (6) statement -> PRINT LPAREN expression . RPAREN
     (17) expression -> expression . MINUS expression
@@ -677,21 +721,21 @@ state 33
     (31) expression -> expression . AND expression
     (32) expression -> expression . OR expression
 
-    RPAREN          shift and go to state 51
-    MINUS           shift and go to state 52
-    PLUS            shift and go to state 53
-    TIMES           shift and go to state 54
-    DIVIDE          shift and go to state 55
-    IS_SUPP         shift and go to state 56
-    IS_SUPP_0R_EQUALS shift and go to state 57
-    IS_INF          shift and go to state 58
-    IS_INF_OR_EQUALS shift and go to state 59
-    IS_EQUALS       shift and go to state 60
-    AND             shift and go to state 61
-    OR              shift and go to state 62
+    RPAREN          shift and go to state 55
+    MINUS           shift and go to state 56
+    PLUS            shift and go to state 57
+    TIMES           shift and go to state 58
+    DIVIDE          shift and go to state 59
+    IS_SUPP         shift and go to state 60
+    IS_SUPP_0R_EQUALS shift and go to state 61
+    IS_INF          shift and go to state 62
+    IS_INF_OR_EQUALS shift and go to state 63
+    IS_EQUALS       shift and go to state 64
+    AND             shift and go to state 65
+    OR              shift and go to state 66
 
 
-state 34
+state 35
 
     (7) statement -> PRINT LPAREN QUOT . expression QUOT RPAREN
     (17) expression -> . expression MINUS expression
@@ -711,15 +755,15 @@ state 34
     (31) expression -> . expression AND expression
     (32) expression -> . expression OR expression
 
-    LPAREN          shift and go to state 32
-    NUMBER          shift and go to state 35
-    NAME            shift and go to state 36
-    TRUE            shift and go to state 37
-    FALSE           shift and go to state 38
+    LPAREN          shift and go to state 33
+    NUMBER          shift and go to state 36
+    NAME            shift and go to state 37
+    TRUE            shift and go to state 38
+    FALSE           shift and go to state 39
 
-    expression                     shift and go to state 63
+    expression                     shift and go to state 67
 
-state 35
+state 36
 
     (22) expression -> NUMBER .
 
@@ -736,11 +780,11 @@ state 35
     AND             reduce using rule 22 (expression -> NUMBER .)
     OR              reduce using rule 22 (expression -> NUMBER .)
     SEMICOLON       reduce using rule 22 (expression -> NUMBER .)
-    QUOT            reduce using rule 22 (expression -> NUMBER .)
     COMMA           reduce using rule 22 (expression -> NUMBER .)
+    QUOT            reduce using rule 22 (expression -> NUMBER .)
 
 
-state 36
+state 37
 
     (23) expression -> NAME .
 
@@ -757,11 +801,11 @@ state 36
     AND             reduce using rule 23 (expression -> NAME .)
     OR              reduce using rule 23 (expression -> NAME .)
     SEMICOLON       reduce using rule 23 (expression -> NAME .)
-    QUOT            reduce using rule 23 (expression -> NAME .)
     COMMA           reduce using rule 23 (expression -> NAME .)
+    QUOT            reduce using rule 23 (expression -> NAME .)
 
 
-state 37
+state 38
 
     (24) expression -> TRUE .
 
@@ -778,11 +822,11 @@ state 37
     AND             reduce using rule 24 (expression -> TRUE .)
     OR              reduce using rule 24 (expression -> TRUE .)
     SEMICOLON       reduce using rule 24 (expression -> TRUE .)
-    QUOT            reduce using rule 24 (expression -> TRUE .)
     COMMA           reduce using rule 24 (expression -> TRUE .)
+    QUOT            reduce using rule 24 (expression -> TRUE .)
 
 
-state 38
+state 39
 
     (25) expression -> FALSE .
 
@@ -799,11 +843,11 @@ state 38
     AND             reduce using rule 25 (expression -> FALSE .)
     OR              reduce using rule 25 (expression -> FALSE .)
     SEMICOLON       reduce using rule 25 (expression -> FALSE .)
-    QUOT            reduce using rule 25 (expression -> FALSE .)
     COMMA           reduce using rule 25 (expression -> FALSE .)
+    QUOT            reduce using rule 25 (expression -> FALSE .)
 
 
-state 39
+state 40
 
     (10) statement -> NAME EQUALS expression .
     (17) expression -> expression . MINUS expression
@@ -820,20 +864,20 @@ state 39
 
     SEMICOLON       reduce using rule 10 (statement -> NAME EQUALS expression .)
     RPAREN          reduce using rule 10 (statement -> NAME EQUALS expression .)
-    MINUS           shift and go to state 52
-    PLUS            shift and go to state 53
-    TIMES           shift and go to state 54
-    DIVIDE          shift and go to state 55
-    IS_SUPP         shift and go to state 56
-    IS_SUPP_0R_EQUALS shift and go to state 57
-    IS_INF          shift and go to state 58
-    IS_INF_OR_EQUALS shift and go to state 59
-    IS_EQUALS       shift and go to state 60
-    AND             shift and go to state 61
-    OR              shift and go to state 62
+    MINUS           shift and go to state 56
+    PLUS            shift and go to state 57
+    TIMES           shift and go to state 58
+    DIVIDE          shift and go to state 59
+    IS_SUPP         shift and go to state 60
+    IS_SUPP_0R_EQUALS shift and go to state 61
+    IS_INF          shift and go to state 62
+    IS_INF_OR_EQUALS shift and go to state 63
+    IS_EQUALS       shift and go to state 64
+    AND             shift and go to state 65
+    OR              shift and go to state 66
 
 
-state 40
+state 41
 
     (13) statement -> NAME PLUS_EQUALS expression .
     (17) expression -> expression . MINUS expression
@@ -850,20 +894,20 @@ state 40
 
     SEMICOLON       reduce using rule 13 (statement -> NAME PLUS_EQUALS expression .)
     RPAREN          reduce using rule 13 (statement -> NAME PLUS_EQUALS expression .)
-    MINUS           shift and go to state 52
-    PLUS            shift and go to state 53
-    TIMES           shift and go to state 54
-    DIVIDE          shift and go to state 55
-    IS_SUPP         shift and go to state 56
-    IS_SUPP_0R_EQUALS shift and go to state 57
-    IS_INF          shift and go to state 58
-    IS_INF_OR_EQUALS shift and go to state 59
-    IS_EQUALS       shift and go to state 60
-    AND             shift and go to state 61
-    OR              shift and go to state 62
+    MINUS           shift and go to state 56
+    PLUS            shift and go to state 57
+    TIMES           shift and go to state 58
+    DIVIDE          shift and go to state 59
+    IS_SUPP         shift and go to state 60
+    IS_SUPP_0R_EQUALS shift and go to state 61
+    IS_INF          shift and go to state 62
+    IS_INF_OR_EQUALS shift and go to state 63
+    IS_EQUALS       shift and go to state 64
+    AND             shift and go to state 65
+    OR              shift and go to state 66
 
 
-state 41
+state 42
 
     (14) statement -> NAME MINUS_EQUALS expression .
     (17) expression -> expression . MINUS expression
@@ -880,20 +924,20 @@ state 41
 
     SEMICOLON       reduce using rule 14 (statement -> NAME MINUS_EQUALS expression .)
     RPAREN          reduce using rule 14 (statement -> NAME MINUS_EQUALS expression .)
-    MINUS           shift and go to state 52
-    PLUS            shift and go to state 53
-    TIMES           shift and go to state 54
-    DIVIDE          shift and go to state 55
-    IS_SUPP         shift and go to state 56
-    IS_SUPP_0R_EQUALS shift and go to state 57
-    IS_INF          shift and go to state 58
-    IS_INF_OR_EQUALS shift and go to state 59
-    IS_EQUALS       shift and go to state 60
-    AND             shift and go to state 61
-    OR              shift and go to state 62
+    MINUS           shift and go to state 56
+    PLUS            shift and go to state 57
+    TIMES           shift and go to state 58
+    DIVIDE          shift and go to state 59
+    IS_SUPP         shift and go to state 60
+    IS_SUPP_0R_EQUALS shift and go to state 61
+    IS_INF          shift and go to state 62
+    IS_INF_OR_EQUALS shift and go to state 63
+    IS_EQUALS       shift and go to state 64
+    AND             shift and go to state 65
+    OR              shift and go to state 66
 
 
-state 42
+state 43
 
     (15) statement -> NAME TIMES_EQUALS expression .
     (17) expression -> expression . MINUS expression
@@ -910,20 +954,20 @@ state 42
 
     SEMICOLON       reduce using rule 15 (statement -> NAME TIMES_EQUALS expression .)
     RPAREN          reduce using rule 15 (statement -> NAME TIMES_EQUALS expression .)
-    MINUS           shift and go to state 52
-    PLUS            shift and go to state 53
-    TIMES           shift and go to state 54
-    DIVIDE          shift and go to state 55
-    IS_SUPP         shift and go to state 56
-    IS_SUPP_0R_EQUALS shift and go to state 57
-    IS_INF          shift and go to state 58
-    IS_INF_OR_EQUALS shift and go to state 59
-    IS_EQUALS       shift and go to state 60
-    AND             shift and go to state 61
-    OR              shift and go to state 62
+    MINUS           shift and go to state 56
+    PLUS            shift and go to state 57
+    TIMES           shift and go to state 58
+    DIVIDE          shift and go to state 59
+    IS_SUPP         shift and go to state 60
+    IS_SUPP_0R_EQUALS shift and go to state 61
+    IS_INF          shift and go to state 62
+    IS_INF_OR_EQUALS shift and go to state 63
+    IS_EQUALS       shift and go to state 64
+    AND             shift and go to state 65
+    OR              shift and go to state 66
 
 
-state 43
+state 44
 
     (16) statement -> NAME DIVIDE_EQUALS expression .
     (17) expression -> expression . MINUS expression
@@ -940,20 +984,66 @@ state 43
 
     SEMICOLON       reduce using rule 16 (statement -> NAME DIVIDE_EQUALS expression .)
     RPAREN          reduce using rule 16 (statement -> NAME DIVIDE_EQUALS expression .)
-    MINUS           shift and go to state 52
-    PLUS            shift and go to state 53
-    TIMES           shift and go to state 54
-    DIVIDE          shift and go to state 55
-    IS_SUPP         shift and go to state 56
-    IS_SUPP_0R_EQUALS shift and go to state 57
-    IS_INF          shift and go to state 58
-    IS_INF_OR_EQUALS shift and go to state 59
-    IS_EQUALS       shift and go to state 60
-    AND             shift and go to state 61
-    OR              shift and go to state 62
+    MINUS           shift and go to state 56
+    PLUS            shift and go to state 57
+    TIMES           shift and go to state 58
+    DIVIDE          shift and go to state 59
+    IS_SUPP         shift and go to state 60
+    IS_SUPP_0R_EQUALS shift and go to state 61
+    IS_INF          shift and go to state 62
+    IS_INF_OR_EQUALS shift and go to state 63
+    IS_EQUALS       shift and go to state 64
+    AND             shift and go to state 65
+    OR              shift and go to state 66
 
 
-state 44
+state 45
+
+    (41) statement -> NAME LPAREN RPAREN .
+
+    SEMICOLON       reduce using rule 41 (statement -> NAME LPAREN RPAREN .)
+    RPAREN          reduce using rule 41 (statement -> NAME LPAREN RPAREN .)
+
+
+state 46
+
+    (42) statement -> NAME LPAREN args . RPAREN
+
+    RPAREN          shift and go to state 68
+
+
+state 47
+
+    (37) args -> expression .
+    (38) args -> expression . COMMA args
+    (17) expression -> expression . MINUS expression
+    (18) expression -> expression . PLUS expression
+    (19) expression -> expression . TIMES expression
+    (20) expression -> expression . DIVIDE expression
+    (26) expression -> expression . IS_SUPP expression
+    (27) expression -> expression . IS_SUPP_0R_EQUALS expression
+    (28) expression -> expression . IS_INF expression
+    (29) expression -> expression . IS_INF_OR_EQUALS expression
+    (30) expression -> expression . IS_EQUALS expression
+    (31) expression -> expression . AND expression
+    (32) expression -> expression . OR expression
+
+    RPAREN          reduce using rule 37 (args -> expression .)
+    COMMA           shift and go to state 69
+    MINUS           shift and go to state 56
+    PLUS            shift and go to state 57
+    TIMES           shift and go to state 58
+    DIVIDE          shift and go to state 59
+    IS_SUPP         shift and go to state 60
+    IS_SUPP_0R_EQUALS shift and go to state 61
+    IS_INF          shift and go to state 62
+    IS_INF_OR_EQUALS shift and go to state 63
+    IS_EQUALS       shift and go to state 64
+    AND             shift and go to state 65
+    OR              shift and go to state 66
+
+
+state 48
 
     (33) statement -> IF LPAREN expression . RPAREN LACO bloc RACO
     (34) statement -> IF LPAREN expression . RPAREN LACO bloc RACO ELSE LACO bloc RACO
@@ -969,21 +1059,21 @@ state 44
     (31) expression -> expression . AND expression
     (32) expression -> expression . OR expression
 
-    RPAREN          shift and go to state 64
-    MINUS           shift and go to state 52
-    PLUS            shift and go to state 53
-    TIMES           shift and go to state 54
-    DIVIDE          shift and go to state 55
-    IS_SUPP         shift and go to state 56
-    IS_SUPP_0R_EQUALS shift and go to state 57
-    IS_INF          shift and go to state 58
-    IS_INF_OR_EQUALS shift and go to state 59
-    IS_EQUALS       shift and go to state 60
-    AND             shift and go to state 61
-    OR              shift and go to state 62
+    RPAREN          shift and go to state 70
+    MINUS           shift and go to state 56
+    PLUS            shift and go to state 57
+    TIMES           shift and go to state 58
+    DIVIDE          shift and go to state 59
+    IS_SUPP         shift and go to state 60
+    IS_SUPP_0R_EQUALS shift and go to state 61
+    IS_INF          shift and go to state 62
+    IS_INF_OR_EQUALS shift and go to state 63
+    IS_EQUALS       shift and go to state 64
+    AND             shift and go to state 65
+    OR              shift and go to state 66
 
 
-state 45
+state 49
 
     (35) statement -> WHILE LPAREN expression . RPAREN LACO bloc RACO
     (17) expression -> expression . MINUS expression
@@ -998,28 +1088,28 @@ state 45
     (31) expression -> expression . AND expression
     (32) expression -> expression . OR expression
 
-    RPAREN          shift and go to state 65
-    MINUS           shift and go to state 52
-    PLUS            shift and go to state 53
-    TIMES           shift and go to state 54
-    DIVIDE          shift and go to state 55
-    IS_SUPP         shift and go to state 56
-    IS_SUPP_0R_EQUALS shift and go to state 57
-    IS_INF          shift and go to state 58
-    IS_INF_OR_EQUALS shift and go to state 59
-    IS_EQUALS       shift and go to state 60
-    AND             shift and go to state 61
-    OR              shift and go to state 62
+    RPAREN          shift and go to state 71
+    MINUS           shift and go to state 56
+    PLUS            shift and go to state 57
+    TIMES           shift and go to state 58
+    DIVIDE          shift and go to state 59
+    IS_SUPP         shift and go to state 60
+    IS_SUPP_0R_EQUALS shift and go to state 61
+    IS_INF          shift and go to state 62
+    IS_INF_OR_EQUALS shift and go to state 63
+    IS_EQUALS       shift and go to state 64
+    AND             shift and go to state 65
+    OR              shift and go to state 66
 
 
-state 46
+state 50
 
     (36) statement -> FOR LPAREN statement . SEMICOLON expression SEMICOLON statement RPAREN LACO bloc RACO
 
-    SEMICOLON       shift and go to state 66
+    SEMICOLON       shift and go to state 72
 
 
-state 47
+state 51
 
     (39) statement -> FUNCTION NAME LPAREN . RPAREN LACO bloc RACO
     (40) statement -> FUNCTION NAME LPAREN . args RPAREN LACO bloc RACO
@@ -1042,17 +1132,17 @@ state 47
     (31) expression -> . expression AND expression
     (32) expression -> . expression OR expression
 
-    RPAREN          shift and go to state 67
-    LPAREN          shift and go to state 32
-    NUMBER          shift and go to state 35
-    NAME            shift and go to state 36
-    TRUE            shift and go to state 37
-    FALSE           shift and go to state 38
+    RPAREN          shift and go to state 73
+    LPAREN          shift and go to state 33
+    NUMBER          shift and go to state 36
+    NAME            shift and go to state 37
+    TRUE            shift and go to state 38
+    FALSE           shift and go to state 39
 
-    args                           shift and go to state 68
-    expression                     shift and go to state 69
+    args                           shift and go to state 74
+    expression                     shift and go to state 47
 
-state 48
+state 52
 
     (4) bloc -> bloc LCOMMENT comment RCOMMENT .
 
@@ -1067,14 +1157,14 @@ state 48
     RACO            reduce using rule 4 (bloc -> bloc LCOMMENT comment RCOMMENT .)
 
 
-state 49
+state 53
 
     (9) comment -> NAME SPACE comment .
 
     RCOMMENT        reduce using rule 9 (comment -> NAME SPACE comment .)
 
 
-state 50
+state 54
 
     (21) expression -> LPAREN expression . RPAREN
     (17) expression -> expression . MINUS expression
@@ -1089,21 +1179,21 @@ state 50
     (31) expression -> expression . AND expression
     (32) expression -> expression . OR expression
 
-    RPAREN          shift and go to state 70
-    MINUS           shift and go to state 52
-    PLUS            shift and go to state 53
-    TIMES           shift and go to state 54
-    DIVIDE          shift and go to state 55
-    IS_SUPP         shift and go to state 56
-    IS_SUPP_0R_EQUALS shift and go to state 57
-    IS_INF          shift and go to state 58
-    IS_INF_OR_EQUALS shift and go to state 59
-    IS_EQUALS       shift and go to state 60
-    AND             shift and go to state 61
-    OR              shift and go to state 62
+    RPAREN          shift and go to state 75
+    MINUS           shift and go to state 56
+    PLUS            shift and go to state 57
+    TIMES           shift and go to state 58
+    DIVIDE          shift and go to state 59
+    IS_SUPP         shift and go to state 60
+    IS_SUPP_0R_EQUALS shift and go to state 61
+    IS_INF          shift and go to state 62
+    IS_INF_OR_EQUALS shift and go to state 63
+    IS_EQUALS       shift and go to state 64
+    AND             shift and go to state 65
+    OR              shift and go to state 66
 
 
-state 51
+state 55
 
     (6) statement -> PRINT LPAREN expression RPAREN .
 
@@ -1111,7 +1201,7 @@ state 51
     RPAREN          reduce using rule 6 (statement -> PRINT LPAREN expression RPAREN .)
 
 
-state 52
+state 56
 
     (17) expression -> expression MINUS . expression
     (17) expression -> . expression MINUS expression
@@ -1131,15 +1221,15 @@ state 52
     (31) expression -> . expression AND expression
     (32) expression -> . expression OR expression
 
-    LPAREN          shift and go to state 32
-    NUMBER          shift and go to state 35
-    NAME            shift and go to state 36
-    TRUE            shift and go to state 37
-    FALSE           shift and go to state 38
+    LPAREN          shift and go to state 33
+    NUMBER          shift and go to state 36
+    NAME            shift and go to state 37
+    TRUE            shift and go to state 38
+    FALSE           shift and go to state 39
 
-    expression                     shift and go to state 71
+    expression                     shift and go to state 76
 
-state 53
+state 57
 
     (18) expression -> expression PLUS . expression
     (17) expression -> . expression MINUS expression
@@ -1159,15 +1249,15 @@ state 53
     (31) expression -> . expression AND expression
     (32) expression -> . expression OR expression
 
-    LPAREN          shift and go to state 32
-    NUMBER          shift and go to state 35
-    NAME            shift and go to state 36
-    TRUE            shift and go to state 37
-    FALSE           shift and go to state 38
+    LPAREN          shift and go to state 33
+    NUMBER          shift and go to state 36
+    NAME            shift and go to state 37
+    TRUE            shift and go to state 38
+    FALSE           shift and go to state 39
 
-    expression                     shift and go to state 72
+    expression                     shift and go to state 77
 
-state 54
+state 58
 
     (19) expression -> expression TIMES . expression
     (17) expression -> . expression MINUS expression
@@ -1187,15 +1277,15 @@ state 54
     (31) expression -> . expression AND expression
     (32) expression -> . expression OR expression
 
-    LPAREN          shift and go to state 32
-    NUMBER          shift and go to state 35
-    NAME            shift and go to state 36
-    TRUE            shift and go to state 37
-    FALSE           shift and go to state 38
+    LPAREN          shift and go to state 33
+    NUMBER          shift and go to state 36
+    NAME            shift and go to state 37
+    TRUE            shift and go to state 38
+    FALSE           shift and go to state 39
 
-    expression                     shift and go to state 73
+    expression                     shift and go to state 78
 
-state 55
+state 59
 
     (20) expression -> expression DIVIDE . expression
     (17) expression -> . expression MINUS expression
@@ -1215,15 +1305,15 @@ state 55
     (31) expression -> . expression AND expression
     (32) expression -> . expression OR expression
 
-    LPAREN          shift and go to state 32
-    NUMBER          shift and go to state 35
-    NAME            shift and go to state 36
-    TRUE            shift and go to state 37
-    FALSE           shift and go to state 38
+    LPAREN          shift and go to state 33
+    NUMBER          shift and go to state 36
+    NAME            shift and go to state 37
+    TRUE            shift and go to state 38
+    FALSE           shift and go to state 39
 
-    expression                     shift and go to state 74
+    expression                     shift and go to state 79
 
-state 56
+state 60
 
     (26) expression -> expression IS_SUPP . expression
     (17) expression -> . expression MINUS expression
@@ -1243,15 +1333,15 @@ state 56
     (31) expression -> . expression AND expression
     (32) expression -> . expression OR expression
 
-    LPAREN          shift and go to state 32
-    NUMBER          shift and go to state 35
-    NAME            shift and go to state 36
-    TRUE            shift and go to state 37
-    FALSE           shift and go to state 38
+    LPAREN          shift and go to state 33
+    NUMBER          shift and go to state 36
+    NAME            shift and go to state 37
+    TRUE            shift and go to state 38
+    FALSE           shift and go to state 39
 
-    expression                     shift and go to state 75
+    expression                     shift and go to state 80
 
-state 57
+state 61
 
     (27) expression -> expression IS_SUPP_0R_EQUALS . expression
     (17) expression -> . expression MINUS expression
@@ -1271,15 +1361,15 @@ state 57
     (31) expression -> . expression AND expression
     (32) expression -> . expression OR expression
 
-    LPAREN          shift and go to state 32
-    NUMBER          shift and go to state 35
-    NAME            shift and go to state 36
-    TRUE            shift and go to state 37
-    FALSE           shift and go to state 38
+    LPAREN          shift and go to state 33
+    NUMBER          shift and go to state 36
+    NAME            shift and go to state 37
+    TRUE            shift and go to state 38
+    FALSE           shift and go to state 39
 
-    expression                     shift and go to state 76
+    expression                     shift and go to state 81
 
-state 58
+state 62
 
     (28) expression -> expression IS_INF . expression
     (17) expression -> . expression MINUS expression
@@ -1299,15 +1389,15 @@ state 58
     (31) expression -> . expression AND expression
     (32) expression -> . expression OR expression
 
-    LPAREN          shift and go to state 32
-    NUMBER          shift and go to state 35
-    NAME            shift and go to state 36
-    TRUE            shift and go to state 37
-    FALSE           shift and go to state 38
+    LPAREN          shift and go to state 33
+    NUMBER          shift and go to state 36
+    NAME            shift and go to state 37
+    TRUE            shift and go to state 38
+    FALSE           shift and go to state 39
 
-    expression                     shift and go to state 77
+    expression                     shift and go to state 82
 
-state 59
+state 63
 
     (29) expression -> expression IS_INF_OR_EQUALS . expression
     (17) expression -> . expression MINUS expression
@@ -1327,15 +1417,15 @@ state 59
     (31) expression -> . expression AND expression
     (32) expression -> . expression OR expression
 
-    LPAREN          shift and go to state 32
-    NUMBER          shift and go to state 35
-    NAME            shift and go to state 36
-    TRUE            shift and go to state 37
-    FALSE           shift and go to state 38
+    LPAREN          shift and go to state 33
+    NUMBER          shift and go to state 36
+    NAME            shift and go to state 37
+    TRUE            shift and go to state 38
+    FALSE           shift and go to state 39
 
-    expression                     shift and go to state 78
+    expression                     shift and go to state 83
 
-state 60
+state 64
 
     (30) expression -> expression IS_EQUALS . expression
     (17) expression -> . expression MINUS expression
@@ -1355,15 +1445,15 @@ state 60
     (31) expression -> . expression AND expression
     (32) expression -> . expression OR expression
 
-    LPAREN          shift and go to state 32
-    NUMBER          shift and go to state 35
-    NAME            shift and go to state 36
-    TRUE            shift and go to state 37
-    FALSE           shift and go to state 38
+    LPAREN          shift and go to state 33
+    NUMBER          shift and go to state 36
+    NAME            shift and go to state 37
+    TRUE            shift and go to state 38
+    FALSE           shift and go to state 39
 
-    expression                     shift and go to state 79
+    expression                     shift and go to state 84
 
-state 61
+state 65
 
     (31) expression -> expression AND . expression
     (17) expression -> . expression MINUS expression
@@ -1383,15 +1473,15 @@ state 61
     (31) expression -> . expression AND expression
     (32) expression -> . expression OR expression
 
-    LPAREN          shift and go to state 32
-    NUMBER          shift and go to state 35
-    NAME            shift and go to state 36
-    TRUE            shift and go to state 37
-    FALSE           shift and go to state 38
+    LPAREN          shift and go to state 33
+    NUMBER          shift and go to state 36
+    NAME            shift and go to state 37
+    TRUE            shift and go to state 38
+    FALSE           shift and go to state 39
 
-    expression                     shift and go to state 80
+    expression                     shift and go to state 85
 
-state 62
+state 66
 
     (32) expression -> expression OR . expression
     (17) expression -> . expression MINUS expression
@@ -1411,15 +1501,15 @@ state 62
     (31) expression -> . expression AND expression
     (32) expression -> . expression OR expression
 
-    LPAREN          shift and go to state 32
-    NUMBER          shift and go to state 35
-    NAME            shift and go to state 36
-    TRUE            shift and go to state 37
-    FALSE           shift and go to state 38
+    LPAREN          shift and go to state 33
+    NUMBER          shift and go to state 36
+    NAME            shift and go to state 37
+    TRUE            shift and go to state 38
+    FALSE           shift and go to state 39
 
-    expression                     shift and go to state 81
+    expression                     shift and go to state 86
 
-state 63
+state 67
 
     (7) statement -> PRINT LPAREN QUOT expression . QUOT RPAREN
     (17) expression -> expression . MINUS expression
@@ -1434,36 +1524,75 @@ state 63
     (31) expression -> expression . AND expression
     (32) expression -> expression . OR expression
 
-    QUOT            shift and go to state 82
-    MINUS           shift and go to state 52
-    PLUS            shift and go to state 53
-    TIMES           shift and go to state 54
-    DIVIDE          shift and go to state 55
-    IS_SUPP         shift and go to state 56
-    IS_SUPP_0R_EQUALS shift and go to state 57
-    IS_INF          shift and go to state 58
-    IS_INF_OR_EQUALS shift and go to state 59
-    IS_EQUALS       shift and go to state 60
-    AND             shift and go to state 61
-    OR              shift and go to state 62
+    QUOT            shift and go to state 87
+    MINUS           shift and go to state 56
+    PLUS            shift and go to state 57
+    TIMES           shift and go to state 58
+    DIVIDE          shift and go to state 59
+    IS_SUPP         shift and go to state 60
+    IS_SUPP_0R_EQUALS shift and go to state 61
+    IS_INF          shift and go to state 62
+    IS_INF_OR_EQUALS shift and go to state 63
+    IS_EQUALS       shift and go to state 64
+    AND             shift and go to state 65
+    OR              shift and go to state 66
 
 
-state 64
+state 68
+
+    (42) statement -> NAME LPAREN args RPAREN .
+
+    SEMICOLON       reduce using rule 42 (statement -> NAME LPAREN args RPAREN .)
+    RPAREN          reduce using rule 42 (statement -> NAME LPAREN args RPAREN .)
+
+
+state 69
+
+    (38) args -> expression COMMA . args
+    (37) args -> . expression
+    (38) args -> . expression COMMA args
+    (17) expression -> . expression MINUS expression
+    (18) expression -> . expression PLUS expression
+    (19) expression -> . expression TIMES expression
+    (20) expression -> . expression DIVIDE expression
+    (21) expression -> . LPAREN expression RPAREN
+    (22) expression -> . NUMBER
+    (23) expression -> . NAME
+    (24) expression -> . TRUE
+    (25) expression -> . FALSE
+    (26) expression -> . expression IS_SUPP expression
+    (27) expression -> . expression IS_SUPP_0R_EQUALS expression
+    (28) expression -> . expression IS_INF expression
+    (29) expression -> . expression IS_INF_OR_EQUALS expression
+    (30) expression -> . expression IS_EQUALS expression
+    (31) expression -> . expression AND expression
+    (32) expression -> . expression OR expression
+
+    LPAREN          shift and go to state 33
+    NUMBER          shift and go to state 36
+    NAME            shift and go to state 37
+    TRUE            shift and go to state 38
+    FALSE           shift and go to state 39
+
+    expression                     shift and go to state 47
+    args                           shift and go to state 88
+
+state 70
 
     (33) statement -> IF LPAREN expression RPAREN . LACO bloc RACO
     (34) statement -> IF LPAREN expression RPAREN . LACO bloc RACO ELSE LACO bloc RACO
 
-    LACO            shift and go to state 83
+    LACO            shift and go to state 89
 
 
-state 65
+state 71
 
     (35) statement -> WHILE LPAREN expression RPAREN . LACO bloc RACO
 
-    LACO            shift and go to state 84
+    LACO            shift and go to state 90
 
 
-state 66
+state 72
 
     (36) statement -> FOR LPAREN statement SEMICOLON . expression SEMICOLON statement RPAREN LACO bloc RACO
     (17) expression -> . expression MINUS expression
@@ -1483,60 +1612,29 @@ state 66
     (31) expression -> . expression AND expression
     (32) expression -> . expression OR expression
 
-    LPAREN          shift and go to state 32
-    NUMBER          shift and go to state 35
-    NAME            shift and go to state 36
-    TRUE            shift and go to state 37
-    FALSE           shift and go to state 38
+    LPAREN          shift and go to state 33
+    NUMBER          shift and go to state 36
+    NAME            shift and go to state 37
+    TRUE            shift and go to state 38
+    FALSE           shift and go to state 39
 
-    expression                     shift and go to state 85
+    expression                     shift and go to state 91
 
-state 67
+state 73
 
     (39) statement -> FUNCTION NAME LPAREN RPAREN . LACO bloc RACO
 
-    LACO            shift and go to state 86
+    LACO            shift and go to state 92
 
 
-state 68
+state 74
 
     (40) statement -> FUNCTION NAME LPAREN args . RPAREN LACO bloc RACO
 
-    RPAREN          shift and go to state 87
+    RPAREN          shift and go to state 93
 
 
-state 69
-
-    (37) args -> expression .
-    (38) args -> expression . COMMA args
-    (17) expression -> expression . MINUS expression
-    (18) expression -> expression . PLUS expression
-    (19) expression -> expression . TIMES expression
-    (20) expression -> expression . DIVIDE expression
-    (26) expression -> expression . IS_SUPP expression
-    (27) expression -> expression . IS_SUPP_0R_EQUALS expression
-    (28) expression -> expression . IS_INF expression
-    (29) expression -> expression . IS_INF_OR_EQUALS expression
-    (30) expression -> expression . IS_EQUALS expression
-    (31) expression -> expression . AND expression
-    (32) expression -> expression . OR expression
-
-    RPAREN          reduce using rule 37 (args -> expression .)
-    COMMA           shift and go to state 88
-    MINUS           shift and go to state 52
-    PLUS            shift and go to state 53
-    TIMES           shift and go to state 54
-    DIVIDE          shift and go to state 55
-    IS_SUPP         shift and go to state 56
-    IS_SUPP_0R_EQUALS shift and go to state 57
-    IS_INF          shift and go to state 58
-    IS_INF_OR_EQUALS shift and go to state 59
-    IS_EQUALS       shift and go to state 60
-    AND             shift and go to state 61
-    OR              shift and go to state 62
-
-
-state 70
+state 75
 
     (21) expression -> LPAREN expression RPAREN .
 
@@ -1553,11 +1651,11 @@ state 70
     AND             reduce using rule 21 (expression -> LPAREN expression RPAREN .)
     OR              reduce using rule 21 (expression -> LPAREN expression RPAREN .)
     SEMICOLON       reduce using rule 21 (expression -> LPAREN expression RPAREN .)
-    QUOT            reduce using rule 21 (expression -> LPAREN expression RPAREN .)
     COMMA           reduce using rule 21 (expression -> LPAREN expression RPAREN .)
+    QUOT            reduce using rule 21 (expression -> LPAREN expression RPAREN .)
 
 
-state 71
+state 76
 
     (17) expression -> expression MINUS expression .
     (17) expression -> expression . MINUS expression
@@ -1583,25 +1681,25 @@ state 71
     AND             reduce using rule 17 (expression -> expression MINUS expression .)
     OR              reduce using rule 17 (expression -> expression MINUS expression .)
     SEMICOLON       reduce using rule 17 (expression -> expression MINUS expression .)
-    QUOT            reduce using rule 17 (expression -> expression MINUS expression .)
     COMMA           reduce using rule 17 (expression -> expression MINUS expression .)
-    TIMES           shift and go to state 54
-    DIVIDE          shift and go to state 55
+    QUOT            reduce using rule 17 (expression -> expression MINUS expression .)
+    TIMES           shift and go to state 58
+    DIVIDE          shift and go to state 59
 
   ! TIMES           [ reduce using rule 17 (expression -> expression MINUS expression .) ]
   ! DIVIDE          [ reduce using rule 17 (expression -> expression MINUS expression .) ]
-  ! MINUS           [ shift and go to state 52 ]
-  ! PLUS            [ shift and go to state 53 ]
-  ! IS_SUPP         [ shift and go to state 56 ]
-  ! IS_SUPP_0R_EQUALS [ shift and go to state 57 ]
-  ! IS_INF          [ shift and go to state 58 ]
-  ! IS_INF_OR_EQUALS [ shift and go to state 59 ]
-  ! IS_EQUALS       [ shift and go to state 60 ]
-  ! AND             [ shift and go to state 61 ]
-  ! OR              [ shift and go to state 62 ]
+  ! MINUS           [ shift and go to state 56 ]
+  ! PLUS            [ shift and go to state 57 ]
+  ! IS_SUPP         [ shift and go to state 60 ]
+  ! IS_SUPP_0R_EQUALS [ shift and go to state 61 ]
+  ! IS_INF          [ shift and go to state 62 ]
+  ! IS_INF_OR_EQUALS [ shift and go to state 63 ]
+  ! IS_EQUALS       [ shift and go to state 64 ]
+  ! AND             [ shift and go to state 65 ]
+  ! OR              [ shift and go to state 66 ]
 
 
-state 72
+state 77
 
     (18) expression -> expression PLUS expression .
     (17) expression -> expression . MINUS expression
@@ -1627,25 +1725,25 @@ state 72
     AND             reduce using rule 18 (expression -> expression PLUS expression .)
     OR              reduce using rule 18 (expression -> expression PLUS expression .)
     SEMICOLON       reduce using rule 18 (expression -> expression PLUS expression .)
-    QUOT            reduce using rule 18 (expression -> expression PLUS expression .)
     COMMA           reduce using rule 18 (expression -> expression PLUS expression .)
-    TIMES           shift and go to state 54
-    DIVIDE          shift and go to state 55
+    QUOT            reduce using rule 18 (expression -> expression PLUS expression .)
+    TIMES           shift and go to state 58
+    DIVIDE          shift and go to state 59
 
   ! TIMES           [ reduce using rule 18 (expression -> expression PLUS expression .) ]
   ! DIVIDE          [ reduce using rule 18 (expression -> expression PLUS expression .) ]
-  ! MINUS           [ shift and go to state 52 ]
-  ! PLUS            [ shift and go to state 53 ]
-  ! IS_SUPP         [ shift and go to state 56 ]
-  ! IS_SUPP_0R_EQUALS [ shift and go to state 57 ]
-  ! IS_INF          [ shift and go to state 58 ]
-  ! IS_INF_OR_EQUALS [ shift and go to state 59 ]
-  ! IS_EQUALS       [ shift and go to state 60 ]
-  ! AND             [ shift and go to state 61 ]
-  ! OR              [ shift and go to state 62 ]
+  ! MINUS           [ shift and go to state 56 ]
+  ! PLUS            [ shift and go to state 57 ]
+  ! IS_SUPP         [ shift and go to state 60 ]
+  ! IS_SUPP_0R_EQUALS [ shift and go to state 61 ]
+  ! IS_INF          [ shift and go to state 62 ]
+  ! IS_INF_OR_EQUALS [ shift and go to state 63 ]
+  ! IS_EQUALS       [ shift and go to state 64 ]
+  ! AND             [ shift and go to state 65 ]
+  ! OR              [ shift and go to state 66 ]
 
 
-state 73
+state 78
 
     (19) expression -> expression TIMES expression .
     (17) expression -> expression . MINUS expression
@@ -1673,23 +1771,23 @@ state 73
     AND             reduce using rule 19 (expression -> expression TIMES expression .)
     OR              reduce using rule 19 (expression -> expression TIMES expression .)
     SEMICOLON       reduce using rule 19 (expression -> expression TIMES expression .)
-    QUOT            reduce using rule 19 (expression -> expression TIMES expression .)
     COMMA           reduce using rule 19 (expression -> expression TIMES expression .)
+    QUOT            reduce using rule 19 (expression -> expression TIMES expression .)
 
-  ! MINUS           [ shift and go to state 52 ]
-  ! PLUS            [ shift and go to state 53 ]
-  ! TIMES           [ shift and go to state 54 ]
-  ! DIVIDE          [ shift and go to state 55 ]
-  ! IS_SUPP         [ shift and go to state 56 ]
-  ! IS_SUPP_0R_EQUALS [ shift and go to state 57 ]
-  ! IS_INF          [ shift and go to state 58 ]
-  ! IS_INF_OR_EQUALS [ shift and go to state 59 ]
-  ! IS_EQUALS       [ shift and go to state 60 ]
-  ! AND             [ shift and go to state 61 ]
-  ! OR              [ shift and go to state 62 ]
+  ! MINUS           [ shift and go to state 56 ]
+  ! PLUS            [ shift and go to state 57 ]
+  ! TIMES           [ shift and go to state 58 ]
+  ! DIVIDE          [ shift and go to state 59 ]
+  ! IS_SUPP         [ shift and go to state 60 ]
+  ! IS_SUPP_0R_EQUALS [ shift and go to state 61 ]
+  ! IS_INF          [ shift and go to state 62 ]
+  ! IS_INF_OR_EQUALS [ shift and go to state 63 ]
+  ! IS_EQUALS       [ shift and go to state 64 ]
+  ! AND             [ shift and go to state 65 ]
+  ! OR              [ shift and go to state 66 ]
 
 
-state 74
+state 79
 
     (20) expression -> expression DIVIDE expression .
     (17) expression -> expression . MINUS expression
@@ -1717,23 +1815,23 @@ state 74
     AND             reduce using rule 20 (expression -> expression DIVIDE expression .)
     OR              reduce using rule 20 (expression -> expression DIVIDE expression .)
     SEMICOLON       reduce using rule 20 (expression -> expression DIVIDE expression .)
-    QUOT            reduce using rule 20 (expression -> expression DIVIDE expression .)
     COMMA           reduce using rule 20 (expression -> expression DIVIDE expression .)
+    QUOT            reduce using rule 20 (expression -> expression DIVIDE expression .)
 
-  ! MINUS           [ shift and go to state 52 ]
-  ! PLUS            [ shift and go to state 53 ]
-  ! TIMES           [ shift and go to state 54 ]
-  ! DIVIDE          [ shift and go to state 55 ]
-  ! IS_SUPP         [ shift and go to state 56 ]
-  ! IS_SUPP_0R_EQUALS [ shift and go to state 57 ]
-  ! IS_INF          [ shift and go to state 58 ]
-  ! IS_INF_OR_EQUALS [ shift and go to state 59 ]
-  ! IS_EQUALS       [ shift and go to state 60 ]
-  ! AND             [ shift and go to state 61 ]
-  ! OR              [ shift and go to state 62 ]
+  ! MINUS           [ shift and go to state 56 ]
+  ! PLUS            [ shift and go to state 57 ]
+  ! TIMES           [ shift and go to state 58 ]
+  ! DIVIDE          [ shift and go to state 59 ]
+  ! IS_SUPP         [ shift and go to state 60 ]
+  ! IS_SUPP_0R_EQUALS [ shift and go to state 61 ]
+  ! IS_INF          [ shift and go to state 62 ]
+  ! IS_INF_OR_EQUALS [ shift and go to state 63 ]
+  ! IS_EQUALS       [ shift and go to state 64 ]
+  ! AND             [ shift and go to state 65 ]
+  ! OR              [ shift and go to state 66 ]
 
 
-state 75
+state 80
 
     (26) expression -> expression IS_SUPP expression .
     (17) expression -> expression . MINUS expression
@@ -1757,27 +1855,27 @@ state 75
     AND             reduce using rule 26 (expression -> expression IS_SUPP expression .)
     OR              reduce using rule 26 (expression -> expression IS_SUPP expression .)
     SEMICOLON       reduce using rule 26 (expression -> expression IS_SUPP expression .)
-    QUOT            reduce using rule 26 (expression -> expression IS_SUPP expression .)
     COMMA           reduce using rule 26 (expression -> expression IS_SUPP expression .)
-    MINUS           shift and go to state 52
-    PLUS            shift and go to state 53
-    TIMES           shift and go to state 54
-    DIVIDE          shift and go to state 55
+    QUOT            reduce using rule 26 (expression -> expression IS_SUPP expression .)
+    MINUS           shift and go to state 56
+    PLUS            shift and go to state 57
+    TIMES           shift and go to state 58
+    DIVIDE          shift and go to state 59
 
   ! MINUS           [ reduce using rule 26 (expression -> expression IS_SUPP expression .) ]
   ! PLUS            [ reduce using rule 26 (expression -> expression IS_SUPP expression .) ]
   ! TIMES           [ reduce using rule 26 (expression -> expression IS_SUPP expression .) ]
   ! DIVIDE          [ reduce using rule 26 (expression -> expression IS_SUPP expression .) ]
-  ! IS_SUPP         [ shift and go to state 56 ]
-  ! IS_SUPP_0R_EQUALS [ shift and go to state 57 ]
-  ! IS_INF          [ shift and go to state 58 ]
-  ! IS_INF_OR_EQUALS [ shift and go to state 59 ]
-  ! IS_EQUALS       [ shift and go to state 60 ]
-  ! AND             [ shift and go to state 61 ]
-  ! OR              [ shift and go to state 62 ]
+  ! IS_SUPP         [ shift and go to state 60 ]
+  ! IS_SUPP_0R_EQUALS [ shift and go to state 61 ]
+  ! IS_INF          [ shift and go to state 62 ]
+  ! IS_INF_OR_EQUALS [ shift and go to state 63 ]
+  ! IS_EQUALS       [ shift and go to state 64 ]
+  ! AND             [ shift and go to state 65 ]
+  ! OR              [ shift and go to state 66 ]
 
 
-state 76
+state 81
 
     (27) expression -> expression IS_SUPP_0R_EQUALS expression .
     (17) expression -> expression . MINUS expression
@@ -1801,27 +1899,27 @@ state 76
     AND             reduce using rule 27 (expression -> expression IS_SUPP_0R_EQUALS expression .)
     OR              reduce using rule 27 (expression -> expression IS_SUPP_0R_EQUALS expression .)
     SEMICOLON       reduce using rule 27 (expression -> expression IS_SUPP_0R_EQUALS expression .)
-    QUOT            reduce using rule 27 (expression -> expression IS_SUPP_0R_EQUALS expression .)
     COMMA           reduce using rule 27 (expression -> expression IS_SUPP_0R_EQUALS expression .)
-    MINUS           shift and go to state 52
-    PLUS            shift and go to state 53
-    TIMES           shift and go to state 54
-    DIVIDE          shift and go to state 55
+    QUOT            reduce using rule 27 (expression -> expression IS_SUPP_0R_EQUALS expression .)
+    MINUS           shift and go to state 56
+    PLUS            shift and go to state 57
+    TIMES           shift and go to state 58
+    DIVIDE          shift and go to state 59
 
   ! MINUS           [ reduce using rule 27 (expression -> expression IS_SUPP_0R_EQUALS expression .) ]
   ! PLUS            [ reduce using rule 27 (expression -> expression IS_SUPP_0R_EQUALS expression .) ]
   ! TIMES           [ reduce using rule 27 (expression -> expression IS_SUPP_0R_EQUALS expression .) ]
   ! DIVIDE          [ reduce using rule 27 (expression -> expression IS_SUPP_0R_EQUALS expression .) ]
-  ! IS_SUPP         [ shift and go to state 56 ]
-  ! IS_SUPP_0R_EQUALS [ shift and go to state 57 ]
-  ! IS_INF          [ shift and go to state 58 ]
-  ! IS_INF_OR_EQUALS [ shift and go to state 59 ]
-  ! IS_EQUALS       [ shift and go to state 60 ]
-  ! AND             [ shift and go to state 61 ]
-  ! OR              [ shift and go to state 62 ]
+  ! IS_SUPP         [ shift and go to state 60 ]
+  ! IS_SUPP_0R_EQUALS [ shift and go to state 61 ]
+  ! IS_INF          [ shift and go to state 62 ]
+  ! IS_INF_OR_EQUALS [ shift and go to state 63 ]
+  ! IS_EQUALS       [ shift and go to state 64 ]
+  ! AND             [ shift and go to state 65 ]
+  ! OR              [ shift and go to state 66 ]
 
 
-state 77
+state 82
 
     (28) expression -> expression IS_INF expression .
     (17) expression -> expression . MINUS expression
@@ -1845,27 +1943,27 @@ state 77
     AND             reduce using rule 28 (expression -> expression IS_INF expression .)
     OR              reduce using rule 28 (expression -> expression IS_INF expression .)
     SEMICOLON       reduce using rule 28 (expression -> expression IS_INF expression .)
-    QUOT            reduce using rule 28 (expression -> expression IS_INF expression .)
     COMMA           reduce using rule 28 (expression -> expression IS_INF expression .)
-    MINUS           shift and go to state 52
-    PLUS            shift and go to state 53
-    TIMES           shift and go to state 54
-    DIVIDE          shift and go to state 55
+    QUOT            reduce using rule 28 (expression -> expression IS_INF expression .)
+    MINUS           shift and go to state 56
+    PLUS            shift and go to state 57
+    TIMES           shift and go to state 58
+    DIVIDE          shift and go to state 59
 
   ! MINUS           [ reduce using rule 28 (expression -> expression IS_INF expression .) ]
   ! PLUS            [ reduce using rule 28 (expression -> expression IS_INF expression .) ]
   ! TIMES           [ reduce using rule 28 (expression -> expression IS_INF expression .) ]
   ! DIVIDE          [ reduce using rule 28 (expression -> expression IS_INF expression .) ]
-  ! IS_SUPP         [ shift and go to state 56 ]
-  ! IS_SUPP_0R_EQUALS [ shift and go to state 57 ]
-  ! IS_INF          [ shift and go to state 58 ]
-  ! IS_INF_OR_EQUALS [ shift and go to state 59 ]
-  ! IS_EQUALS       [ shift and go to state 60 ]
-  ! AND             [ shift and go to state 61 ]
-  ! OR              [ shift and go to state 62 ]
+  ! IS_SUPP         [ shift and go to state 60 ]
+  ! IS_SUPP_0R_EQUALS [ shift and go to state 61 ]
+  ! IS_INF          [ shift and go to state 62 ]
+  ! IS_INF_OR_EQUALS [ shift and go to state 63 ]
+  ! IS_EQUALS       [ shift and go to state 64 ]
+  ! AND             [ shift and go to state 65 ]
+  ! OR              [ shift and go to state 66 ]
 
 
-state 78
+state 83
 
     (29) expression -> expression IS_INF_OR_EQUALS expression .
     (17) expression -> expression . MINUS expression
@@ -1889,27 +1987,27 @@ state 78
     AND             reduce using rule 29 (expression -> expression IS_INF_OR_EQUALS expression .)
     OR              reduce using rule 29 (expression -> expression IS_INF_OR_EQUALS expression .)
     SEMICOLON       reduce using rule 29 (expression -> expression IS_INF_OR_EQUALS expression .)
-    QUOT            reduce using rule 29 (expression -> expression IS_INF_OR_EQUALS expression .)
     COMMA           reduce using rule 29 (expression -> expression IS_INF_OR_EQUALS expression .)
-    MINUS           shift and go to state 52
-    PLUS            shift and go to state 53
-    TIMES           shift and go to state 54
-    DIVIDE          shift and go to state 55
+    QUOT            reduce using rule 29 (expression -> expression IS_INF_OR_EQUALS expression .)
+    MINUS           shift and go to state 56
+    PLUS            shift and go to state 57
+    TIMES           shift and go to state 58
+    DIVIDE          shift and go to state 59
 
   ! MINUS           [ reduce using rule 29 (expression -> expression IS_INF_OR_EQUALS expression .) ]
   ! PLUS            [ reduce using rule 29 (expression -> expression IS_INF_OR_EQUALS expression .) ]
   ! TIMES           [ reduce using rule 29 (expression -> expression IS_INF_OR_EQUALS expression .) ]
   ! DIVIDE          [ reduce using rule 29 (expression -> expression IS_INF_OR_EQUALS expression .) ]
-  ! IS_SUPP         [ shift and go to state 56 ]
-  ! IS_SUPP_0R_EQUALS [ shift and go to state 57 ]
-  ! IS_INF          [ shift and go to state 58 ]
-  ! IS_INF_OR_EQUALS [ shift and go to state 59 ]
-  ! IS_EQUALS       [ shift and go to state 60 ]
-  ! AND             [ shift and go to state 61 ]
-  ! OR              [ shift and go to state 62 ]
+  ! IS_SUPP         [ shift and go to state 60 ]
+  ! IS_SUPP_0R_EQUALS [ shift and go to state 61 ]
+  ! IS_INF          [ shift and go to state 62 ]
+  ! IS_INF_OR_EQUALS [ shift and go to state 63 ]
+  ! IS_EQUALS       [ shift and go to state 64 ]
+  ! AND             [ shift and go to state 65 ]
+  ! OR              [ shift and go to state 66 ]
 
 
-state 79
+state 84
 
     (30) expression -> expression IS_EQUALS expression .
     (17) expression -> expression . MINUS expression
@@ -1933,27 +2031,27 @@ state 79
     AND             reduce using rule 30 (expression -> expression IS_EQUALS expression .)
     OR              reduce using rule 30 (expression -> expression IS_EQUALS expression .)
     SEMICOLON       reduce using rule 30 (expression -> expression IS_EQUALS expression .)
-    QUOT            reduce using rule 30 (expression -> expression IS_EQUALS expression .)
     COMMA           reduce using rule 30 (expression -> expression IS_EQUALS expression .)
-    MINUS           shift and go to state 52
-    PLUS            shift and go to state 53
-    TIMES           shift and go to state 54
-    DIVIDE          shift and go to state 55
+    QUOT            reduce using rule 30 (expression -> expression IS_EQUALS expression .)
+    MINUS           shift and go to state 56
+    PLUS            shift and go to state 57
+    TIMES           shift and go to state 58
+    DIVIDE          shift and go to state 59
 
   ! MINUS           [ reduce using rule 30 (expression -> expression IS_EQUALS expression .) ]
   ! PLUS            [ reduce using rule 30 (expression -> expression IS_EQUALS expression .) ]
   ! TIMES           [ reduce using rule 30 (expression -> expression IS_EQUALS expression .) ]
   ! DIVIDE          [ reduce using rule 30 (expression -> expression IS_EQUALS expression .) ]
-  ! IS_SUPP         [ shift and go to state 56 ]
-  ! IS_SUPP_0R_EQUALS [ shift and go to state 57 ]
-  ! IS_INF          [ shift and go to state 58 ]
-  ! IS_INF_OR_EQUALS [ shift and go to state 59 ]
-  ! IS_EQUALS       [ shift and go to state 60 ]
-  ! AND             [ shift and go to state 61 ]
-  ! OR              [ shift and go to state 62 ]
+  ! IS_SUPP         [ shift and go to state 60 ]
+  ! IS_SUPP_0R_EQUALS [ shift and go to state 61 ]
+  ! IS_INF          [ shift and go to state 62 ]
+  ! IS_INF_OR_EQUALS [ shift and go to state 63 ]
+  ! IS_EQUALS       [ shift and go to state 64 ]
+  ! AND             [ shift and go to state 65 ]
+  ! OR              [ shift and go to state 66 ]
 
 
-state 80
+state 85
 
     (31) expression -> expression AND expression .
     (17) expression -> expression . MINUS expression
@@ -1972,17 +2070,17 @@ state 80
     AND             reduce using rule 31 (expression -> expression AND expression .)
     OR              reduce using rule 31 (expression -> expression AND expression .)
     SEMICOLON       reduce using rule 31 (expression -> expression AND expression .)
-    QUOT            reduce using rule 31 (expression -> expression AND expression .)
     COMMA           reduce using rule 31 (expression -> expression AND expression .)
-    MINUS           shift and go to state 52
-    PLUS            shift and go to state 53
-    TIMES           shift and go to state 54
-    DIVIDE          shift and go to state 55
-    IS_SUPP         shift and go to state 56
-    IS_SUPP_0R_EQUALS shift and go to state 57
-    IS_INF          shift and go to state 58
-    IS_INF_OR_EQUALS shift and go to state 59
-    IS_EQUALS       shift and go to state 60
+    QUOT            reduce using rule 31 (expression -> expression AND expression .)
+    MINUS           shift and go to state 56
+    PLUS            shift and go to state 57
+    TIMES           shift and go to state 58
+    DIVIDE          shift and go to state 59
+    IS_SUPP         shift and go to state 60
+    IS_SUPP_0R_EQUALS shift and go to state 61
+    IS_INF          shift and go to state 62
+    IS_INF_OR_EQUALS shift and go to state 63
+    IS_EQUALS       shift and go to state 64
 
   ! MINUS           [ reduce using rule 31 (expression -> expression AND expression .) ]
   ! PLUS            [ reduce using rule 31 (expression -> expression AND expression .) ]
@@ -1993,11 +2091,11 @@ state 80
   ! IS_INF          [ reduce using rule 31 (expression -> expression AND expression .) ]
   ! IS_INF_OR_EQUALS [ reduce using rule 31 (expression -> expression AND expression .) ]
   ! IS_EQUALS       [ reduce using rule 31 (expression -> expression AND expression .) ]
-  ! AND             [ shift and go to state 61 ]
-  ! OR              [ shift and go to state 62 ]
+  ! AND             [ shift and go to state 65 ]
+  ! OR              [ shift and go to state 66 ]
 
 
-state 81
+state 86
 
     (32) expression -> expression OR expression .
     (17) expression -> expression . MINUS expression
@@ -2015,18 +2113,18 @@ state 81
     RPAREN          reduce using rule 32 (expression -> expression OR expression .)
     OR              reduce using rule 32 (expression -> expression OR expression .)
     SEMICOLON       reduce using rule 32 (expression -> expression OR expression .)
-    QUOT            reduce using rule 32 (expression -> expression OR expression .)
     COMMA           reduce using rule 32 (expression -> expression OR expression .)
-    MINUS           shift and go to state 52
-    PLUS            shift and go to state 53
-    TIMES           shift and go to state 54
-    DIVIDE          shift and go to state 55
-    IS_SUPP         shift and go to state 56
-    IS_SUPP_0R_EQUALS shift and go to state 57
-    IS_INF          shift and go to state 58
-    IS_INF_OR_EQUALS shift and go to state 59
-    IS_EQUALS       shift and go to state 60
-    AND             shift and go to state 61
+    QUOT            reduce using rule 32 (expression -> expression OR expression .)
+    MINUS           shift and go to state 56
+    PLUS            shift and go to state 57
+    TIMES           shift and go to state 58
+    DIVIDE          shift and go to state 59
+    IS_SUPP         shift and go to state 60
+    IS_SUPP_0R_EQUALS shift and go to state 61
+    IS_INF          shift and go to state 62
+    IS_INF_OR_EQUALS shift and go to state 63
+    IS_EQUALS       shift and go to state 64
+    AND             shift and go to state 65
 
   ! MINUS           [ reduce using rule 32 (expression -> expression OR expression .) ]
   ! PLUS            [ reduce using rule 32 (expression -> expression OR expression .) ]
@@ -2038,17 +2136,24 @@ state 81
   ! IS_INF_OR_EQUALS [ reduce using rule 32 (expression -> expression OR expression .) ]
   ! IS_EQUALS       [ reduce using rule 32 (expression -> expression OR expression .) ]
   ! AND             [ reduce using rule 32 (expression -> expression OR expression .) ]
-  ! OR              [ shift and go to state 62 ]
+  ! OR              [ shift and go to state 66 ]
 
 
-state 82
+state 87
 
     (7) statement -> PRINT LPAREN QUOT expression QUOT . RPAREN
 
-    RPAREN          shift and go to state 89
+    RPAREN          shift and go to state 94
 
 
-state 83
+state 88
+
+    (38) args -> expression COMMA args .
+
+    RPAREN          reduce using rule 38 (args -> expression COMMA args .)
+
+
+state 89
 
     (33) statement -> IF LPAREN expression RPAREN LACO . bloc RACO
     (34) statement -> IF LPAREN expression RPAREN LACO . bloc RACO ELSE LACO bloc RACO
@@ -2071,6 +2176,8 @@ state 83
     (36) statement -> . FOR LPAREN statement SEMICOLON expression SEMICOLON statement RPAREN LACO bloc RACO
     (39) statement -> . FUNCTION NAME LPAREN RPAREN LACO bloc RACO
     (40) statement -> . FUNCTION NAME LPAREN args RPAREN LACO bloc RACO
+    (41) statement -> . NAME LPAREN RPAREN
+    (42) statement -> . NAME LPAREN args RPAREN
 
     LCOMMENT        shift and go to state 4
     PRINT           shift and go to state 5
@@ -2080,10 +2187,10 @@ state 83
     FOR             shift and go to state 9
     FUNCTION        shift and go to state 10
 
-    bloc                           shift and go to state 90
+    bloc                           shift and go to state 95
     statement                      shift and go to state 3
 
-state 84
+state 90
 
     (35) statement -> WHILE LPAREN expression RPAREN LACO . bloc RACO
     (2) bloc -> . bloc statement SEMICOLON
@@ -2105,6 +2212,8 @@ state 84
     (36) statement -> . FOR LPAREN statement SEMICOLON expression SEMICOLON statement RPAREN LACO bloc RACO
     (39) statement -> . FUNCTION NAME LPAREN RPAREN LACO bloc RACO
     (40) statement -> . FUNCTION NAME LPAREN args RPAREN LACO bloc RACO
+    (41) statement -> . NAME LPAREN RPAREN
+    (42) statement -> . NAME LPAREN args RPAREN
 
     LCOMMENT        shift and go to state 4
     PRINT           shift and go to state 5
@@ -2114,10 +2223,10 @@ state 84
     FOR             shift and go to state 9
     FUNCTION        shift and go to state 10
 
-    bloc                           shift and go to state 91
+    bloc                           shift and go to state 96
     statement                      shift and go to state 3
 
-state 85
+state 91
 
     (36) statement -> FOR LPAREN statement SEMICOLON expression . SEMICOLON statement RPAREN LACO bloc RACO
     (17) expression -> expression . MINUS expression
@@ -2132,21 +2241,21 @@ state 85
     (31) expression -> expression . AND expression
     (32) expression -> expression . OR expression
 
-    SEMICOLON       shift and go to state 92
-    MINUS           shift and go to state 52
-    PLUS            shift and go to state 53
-    TIMES           shift and go to state 54
-    DIVIDE          shift and go to state 55
-    IS_SUPP         shift and go to state 56
-    IS_SUPP_0R_EQUALS shift and go to state 57
-    IS_INF          shift and go to state 58
-    IS_INF_OR_EQUALS shift and go to state 59
-    IS_EQUALS       shift and go to state 60
-    AND             shift and go to state 61
-    OR              shift and go to state 62
+    SEMICOLON       shift and go to state 97
+    MINUS           shift and go to state 56
+    PLUS            shift and go to state 57
+    TIMES           shift and go to state 58
+    DIVIDE          shift and go to state 59
+    IS_SUPP         shift and go to state 60
+    IS_SUPP_0R_EQUALS shift and go to state 61
+    IS_INF          shift and go to state 62
+    IS_INF_OR_EQUALS shift and go to state 63
+    IS_EQUALS       shift and go to state 64
+    AND             shift and go to state 65
+    OR              shift and go to state 66
 
 
-state 86
+state 92
 
     (39) statement -> FUNCTION NAME LPAREN RPAREN LACO . bloc RACO
     (2) bloc -> . bloc statement SEMICOLON
@@ -2168,6 +2277,8 @@ state 86
     (36) statement -> . FOR LPAREN statement SEMICOLON expression SEMICOLON statement RPAREN LACO bloc RACO
     (39) statement -> . FUNCTION NAME LPAREN RPAREN LACO bloc RACO
     (40) statement -> . FUNCTION NAME LPAREN args RPAREN LACO bloc RACO
+    (41) statement -> . NAME LPAREN RPAREN
+    (42) statement -> . NAME LPAREN args RPAREN
 
     LCOMMENT        shift and go to state 4
     PRINT           shift and go to state 5
@@ -2177,48 +2288,17 @@ state 86
     FOR             shift and go to state 9
     FUNCTION        shift and go to state 10
 
-    bloc                           shift and go to state 93
+    bloc                           shift and go to state 98
     statement                      shift and go to state 3
 
-state 87
+state 93
 
     (40) statement -> FUNCTION NAME LPAREN args RPAREN . LACO bloc RACO
 
-    LACO            shift and go to state 94
+    LACO            shift and go to state 99
 
 
-state 88
-
-    (38) args -> expression COMMA . args
-    (37) args -> . expression
-    (38) args -> . expression COMMA args
-    (17) expression -> . expression MINUS expression
-    (18) expression -> . expression PLUS expression
-    (19) expression -> . expression TIMES expression
-    (20) expression -> . expression DIVIDE expression
-    (21) expression -> . LPAREN expression RPAREN
-    (22) expression -> . NUMBER
-    (23) expression -> . NAME
-    (24) expression -> . TRUE
-    (25) expression -> . FALSE
-    (26) expression -> . expression IS_SUPP expression
-    (27) expression -> . expression IS_SUPP_0R_EQUALS expression
-    (28) expression -> . expression IS_INF expression
-    (29) expression -> . expression IS_INF_OR_EQUALS expression
-    (30) expression -> . expression IS_EQUALS expression
-    (31) expression -> . expression AND expression
-    (32) expression -> . expression OR expression
-
-    LPAREN          shift and go to state 32
-    NUMBER          shift and go to state 35
-    NAME            shift and go to state 36
-    TRUE            shift and go to state 37
-    FALSE           shift and go to state 38
-
-    expression                     shift and go to state 69
-    args                           shift and go to state 95
-
-state 89
+state 94
 
     (7) statement -> PRINT LPAREN QUOT expression QUOT RPAREN .
 
@@ -2226,7 +2306,7 @@ state 89
     RPAREN          reduce using rule 7 (statement -> PRINT LPAREN QUOT expression QUOT RPAREN .)
 
 
-state 90
+state 95
 
     (33) statement -> IF LPAREN expression RPAREN LACO bloc . RACO
     (34) statement -> IF LPAREN expression RPAREN LACO bloc . RACO ELSE LACO bloc RACO
@@ -2247,8 +2327,10 @@ state 90
     (36) statement -> . FOR LPAREN statement SEMICOLON expression SEMICOLON statement RPAREN LACO bloc RACO
     (39) statement -> . FUNCTION NAME LPAREN RPAREN LACO bloc RACO
     (40) statement -> . FUNCTION NAME LPAREN args RPAREN LACO bloc RACO
+    (41) statement -> . NAME LPAREN RPAREN
+    (42) statement -> . NAME LPAREN args RPAREN
 
-    RACO            shift and go to state 96
+    RACO            shift and go to state 100
     LCOMMENT        shift and go to state 12
     PRINT           shift and go to state 5
     NAME            shift and go to state 6
@@ -2259,7 +2341,7 @@ state 90
 
     statement                      shift and go to state 11
 
-state 91
+state 96
 
     (35) statement -> WHILE LPAREN expression RPAREN LACO bloc . RACO
     (2) bloc -> bloc . statement SEMICOLON
@@ -2279,8 +2361,10 @@ state 91
     (36) statement -> . FOR LPAREN statement SEMICOLON expression SEMICOLON statement RPAREN LACO bloc RACO
     (39) statement -> . FUNCTION NAME LPAREN RPAREN LACO bloc RACO
     (40) statement -> . FUNCTION NAME LPAREN args RPAREN LACO bloc RACO
+    (41) statement -> . NAME LPAREN RPAREN
+    (42) statement -> . NAME LPAREN args RPAREN
 
-    RACO            shift and go to state 97
+    RACO            shift and go to state 101
     LCOMMENT        shift and go to state 12
     PRINT           shift and go to state 5
     NAME            shift and go to state 6
@@ -2291,7 +2375,7 @@ state 91
 
     statement                      shift and go to state 11
 
-state 92
+state 97
 
     (36) statement -> FOR LPAREN statement SEMICOLON expression SEMICOLON . statement RPAREN LACO bloc RACO
     (6) statement -> . PRINT LPAREN expression RPAREN
@@ -2309,6 +2393,8 @@ state 92
     (36) statement -> . FOR LPAREN statement SEMICOLON expression SEMICOLON statement RPAREN LACO bloc RACO
     (39) statement -> . FUNCTION NAME LPAREN RPAREN LACO bloc RACO
     (40) statement -> . FUNCTION NAME LPAREN args RPAREN LACO bloc RACO
+    (41) statement -> . NAME LPAREN RPAREN
+    (42) statement -> . NAME LPAREN args RPAREN
 
     PRINT           shift and go to state 5
     NAME            shift and go to state 6
@@ -2317,9 +2403,9 @@ state 92
     FOR             shift and go to state 9
     FUNCTION        shift and go to state 10
 
-    statement                      shift and go to state 98
+    statement                      shift and go to state 102
 
-state 93
+state 98
 
     (39) statement -> FUNCTION NAME LPAREN RPAREN LACO bloc . RACO
     (2) bloc -> bloc . statement SEMICOLON
@@ -2339,8 +2425,10 @@ state 93
     (36) statement -> . FOR LPAREN statement SEMICOLON expression SEMICOLON statement RPAREN LACO bloc RACO
     (39) statement -> . FUNCTION NAME LPAREN RPAREN LACO bloc RACO
     (40) statement -> . FUNCTION NAME LPAREN args RPAREN LACO bloc RACO
+    (41) statement -> . NAME LPAREN RPAREN
+    (42) statement -> . NAME LPAREN args RPAREN
 
-    RACO            shift and go to state 99
+    RACO            shift and go to state 103
     LCOMMENT        shift and go to state 12
     PRINT           shift and go to state 5
     NAME            shift and go to state 6
@@ -2351,7 +2439,7 @@ state 93
 
     statement                      shift and go to state 11
 
-state 94
+state 99
 
     (40) statement -> FUNCTION NAME LPAREN args RPAREN LACO . bloc RACO
     (2) bloc -> . bloc statement SEMICOLON
@@ -2373,6 +2461,8 @@ state 94
     (36) statement -> . FOR LPAREN statement SEMICOLON expression SEMICOLON statement RPAREN LACO bloc RACO
     (39) statement -> . FUNCTION NAME LPAREN RPAREN LACO bloc RACO
     (40) statement -> . FUNCTION NAME LPAREN args RPAREN LACO bloc RACO
+    (41) statement -> . NAME LPAREN RPAREN
+    (42) statement -> . NAME LPAREN args RPAREN
 
     LCOMMENT        shift and go to state 4
     PRINT           shift and go to state 5
@@ -2382,27 +2472,20 @@ state 94
     FOR             shift and go to state 9
     FUNCTION        shift and go to state 10
 
-    bloc                           shift and go to state 100
+    bloc                           shift and go to state 104
     statement                      shift and go to state 3
 
-state 95
-
-    (38) args -> expression COMMA args .
-
-    RPAREN          reduce using rule 38 (args -> expression COMMA args .)
-
-
-state 96
+state 100
 
     (33) statement -> IF LPAREN expression RPAREN LACO bloc RACO .
     (34) statement -> IF LPAREN expression RPAREN LACO bloc RACO . ELSE LACO bloc RACO
 
     SEMICOLON       reduce using rule 33 (statement -> IF LPAREN expression RPAREN LACO bloc RACO .)
     RPAREN          reduce using rule 33 (statement -> IF LPAREN expression RPAREN LACO bloc RACO .)
-    ELSE            shift and go to state 101
+    ELSE            shift and go to state 105
 
 
-state 97
+state 101
 
     (35) statement -> WHILE LPAREN expression RPAREN LACO bloc RACO .
 
@@ -2410,14 +2493,14 @@ state 97
     RPAREN          reduce using rule 35 (statement -> WHILE LPAREN expression RPAREN LACO bloc RACO .)
 
 
-state 98
+state 102
 
     (36) statement -> FOR LPAREN statement SEMICOLON expression SEMICOLON statement . RPAREN LACO bloc RACO
 
-    RPAREN          shift and go to state 102
+    RPAREN          shift and go to state 106
 
 
-state 99
+state 103
 
     (39) statement -> FUNCTION NAME LPAREN RPAREN LACO bloc RACO .
 
@@ -2425,7 +2508,7 @@ state 99
     RPAREN          reduce using rule 39 (statement -> FUNCTION NAME LPAREN RPAREN LACO bloc RACO .)
 
 
-state 100
+state 104
 
     (40) statement -> FUNCTION NAME LPAREN args RPAREN LACO bloc . RACO
     (2) bloc -> bloc . statement SEMICOLON
@@ -2445,8 +2528,10 @@ state 100
     (36) statement -> . FOR LPAREN statement SEMICOLON expression SEMICOLON statement RPAREN LACO bloc RACO
     (39) statement -> . FUNCTION NAME LPAREN RPAREN LACO bloc RACO
     (40) statement -> . FUNCTION NAME LPAREN args RPAREN LACO bloc RACO
+    (41) statement -> . NAME LPAREN RPAREN
+    (42) statement -> . NAME LPAREN args RPAREN
 
-    RACO            shift and go to state 103
+    RACO            shift and go to state 107
     LCOMMENT        shift and go to state 12
     PRINT           shift and go to state 5
     NAME            shift and go to state 6
@@ -2457,21 +2542,21 @@ state 100
 
     statement                      shift and go to state 11
 
-state 101
+state 105
 
     (34) statement -> IF LPAREN expression RPAREN LACO bloc RACO ELSE . LACO bloc RACO
 
-    LACO            shift and go to state 104
+    LACO            shift and go to state 108
 
 
-state 102
+state 106
 
     (36) statement -> FOR LPAREN statement SEMICOLON expression SEMICOLON statement RPAREN . LACO bloc RACO
 
-    LACO            shift and go to state 105
+    LACO            shift and go to state 109
 
 
-state 103
+state 107
 
     (40) statement -> FUNCTION NAME LPAREN args RPAREN LACO bloc RACO .
 
@@ -2479,7 +2564,7 @@ state 103
     RPAREN          reduce using rule 40 (statement -> FUNCTION NAME LPAREN args RPAREN LACO bloc RACO .)
 
 
-state 104
+state 108
 
     (34) statement -> IF LPAREN expression RPAREN LACO bloc RACO ELSE LACO . bloc RACO
     (2) bloc -> . bloc statement SEMICOLON
@@ -2501,6 +2586,8 @@ state 104
     (36) statement -> . FOR LPAREN statement SEMICOLON expression SEMICOLON statement RPAREN LACO bloc RACO
     (39) statement -> . FUNCTION NAME LPAREN RPAREN LACO bloc RACO
     (40) statement -> . FUNCTION NAME LPAREN args RPAREN LACO bloc RACO
+    (41) statement -> . NAME LPAREN RPAREN
+    (42) statement -> . NAME LPAREN args RPAREN
 
     LCOMMENT        shift and go to state 4
     PRINT           shift and go to state 5
@@ -2510,10 +2597,10 @@ state 104
     FOR             shift and go to state 9
     FUNCTION        shift and go to state 10
 
-    bloc                           shift and go to state 106
+    bloc                           shift and go to state 110
     statement                      shift and go to state 3
 
-state 105
+state 109
 
     (36) statement -> FOR LPAREN statement SEMICOLON expression SEMICOLON statement RPAREN LACO . bloc RACO
     (2) bloc -> . bloc statement SEMICOLON
@@ -2535,6 +2622,8 @@ state 105
     (36) statement -> . FOR LPAREN statement SEMICOLON expression SEMICOLON statement RPAREN LACO bloc RACO
     (39) statement -> . FUNCTION NAME LPAREN RPAREN LACO bloc RACO
     (40) statement -> . FUNCTION NAME LPAREN args RPAREN LACO bloc RACO
+    (41) statement -> . NAME LPAREN RPAREN
+    (42) statement -> . NAME LPAREN args RPAREN
 
     LCOMMENT        shift and go to state 4
     PRINT           shift and go to state 5
@@ -2545,9 +2634,9 @@ state 105
     FUNCTION        shift and go to state 10
 
     statement                      shift and go to state 3
-    bloc                           shift and go to state 107
+    bloc                           shift and go to state 111
 
-state 106
+state 110
 
     (34) statement -> IF LPAREN expression RPAREN LACO bloc RACO ELSE LACO bloc . RACO
     (2) bloc -> bloc . statement SEMICOLON
@@ -2567,8 +2656,10 @@ state 106
     (36) statement -> . FOR LPAREN statement SEMICOLON expression SEMICOLON statement RPAREN LACO bloc RACO
     (39) statement -> . FUNCTION NAME LPAREN RPAREN LACO bloc RACO
     (40) statement -> . FUNCTION NAME LPAREN args RPAREN LACO bloc RACO
+    (41) statement -> . NAME LPAREN RPAREN
+    (42) statement -> . NAME LPAREN args RPAREN
 
-    RACO            shift and go to state 108
+    RACO            shift and go to state 112
     LCOMMENT        shift and go to state 12
     PRINT           shift and go to state 5
     NAME            shift and go to state 6
@@ -2579,7 +2670,7 @@ state 106
 
     statement                      shift and go to state 11
 
-state 107
+state 111
 
     (36) statement -> FOR LPAREN statement SEMICOLON expression SEMICOLON statement RPAREN LACO bloc . RACO
     (2) bloc -> bloc . statement SEMICOLON
@@ -2599,8 +2690,10 @@ state 107
     (36) statement -> . FOR LPAREN statement SEMICOLON expression SEMICOLON statement RPAREN LACO bloc RACO
     (39) statement -> . FUNCTION NAME LPAREN RPAREN LACO bloc RACO
     (40) statement -> . FUNCTION NAME LPAREN args RPAREN LACO bloc RACO
+    (41) statement -> . NAME LPAREN RPAREN
+    (42) statement -> . NAME LPAREN args RPAREN
 
-    RACO            shift and go to state 109
+    RACO            shift and go to state 113
     LCOMMENT        shift and go to state 12
     PRINT           shift and go to state 5
     NAME            shift and go to state 6
@@ -2611,7 +2704,7 @@ state 107
 
     statement                      shift and go to state 11
 
-state 108
+state 112
 
     (34) statement -> IF LPAREN expression RPAREN LACO bloc RACO ELSE LACO bloc RACO .
 
@@ -2619,7 +2712,7 @@ state 108
     RPAREN          reduce using rule 34 (statement -> IF LPAREN expression RPAREN LACO bloc RACO ELSE LACO bloc RACO .)
 
 
-state 109
+state 113
 
     (36) statement -> FOR LPAREN statement SEMICOLON expression SEMICOLON statement RPAREN LACO bloc RACO .
 
