@@ -1,3 +1,18 @@
+# Fonctionnalitées
+ - noms de variables à plusieurs caractères
+ - affectation
+ - affichage
+ - instructions conditionnelles
+ - structures itératives
+ - Affichage de l’arbre de syntaxe
+ - Gérer les fonctions sans paramètre
+ - Gestion de quelques erreurs
+ - incrémentation et affectation élargie
+
+
+
+# TESTS
+
 ## affectation, print
 s1 = 'x=4; x=x+3; print(x);'
 TEST : OK

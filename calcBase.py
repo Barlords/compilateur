@@ -111,9 +111,9 @@ lex.lex()
 
 def p_start(p):
     '''START : bloc '''
-    p[0] = ('START', p[1])
+    p[0] = p[1]
     print('Arbre de dérivation = ', p[0])
-    printTreeGraph(p[0])
+    #printTreeGraph(p[0])
     try:
         evalInst(p[1])
     except Exception() as e:
@@ -301,9 +301,9 @@ def evalInst(t):
     if t == 'empty':
         return
     if t[0] == 'print':
-        print(evalExpr(t[1]))
+        print(' calc > ', evalExpr(t[1]))
     if t[0] == 'print_str':
-        print(t[1])
+        print(' calc > ', t[1])
     if t[0] == 'bloc':
         evalInst(t[1])
         evalInst(t[2])
@@ -351,7 +351,7 @@ def evalInst(t):
             if dict(func).get('params', []) is None \
                     or len(func.get('params', [])) > len(call_params)\
                     or len(func.get('params', [])) < len(call_params):
-                raise Exception(len(func.get('params', [])), ' argument(s) attendu, ', len(call_params), ' trouvé(s)')
+                raise Exception(t[1], ' -> ', len(func.get('params', [])), ' argument(s) attendu, ', len(call_params), ' trouvé(s)')
             for i in range(len(func['params'])):
                 names[func['params'][i]] = call_params[i]
         print(functions)
